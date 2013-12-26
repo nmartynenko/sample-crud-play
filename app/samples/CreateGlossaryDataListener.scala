@@ -1,4 +1,4 @@
-package sample
+package samples
 
 import javax.annotation.PostConstruct
 import org.slf4j.LoggerFactory
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import scala.util.Random
 import persistence.GlossaryPersistence
-import model.impl.Glossary
+import models.impl.Glossary
 
 @Service
 class CreateGlossaryDataListener {

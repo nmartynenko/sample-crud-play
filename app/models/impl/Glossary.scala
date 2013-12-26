@@ -1,8 +1,8 @@
-package model.impl
+package models.impl
 
 import javax.persistence._
 import scala.beans.BeanProperty
-import model.BusinessModel
+import models.BusinessModel
 
 @Entity
 @Table(name = "glossary")

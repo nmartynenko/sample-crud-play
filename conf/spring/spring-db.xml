@@ -28,7 +28,7 @@
         </property>
         <property name="packagesToScan">
             <array>
-                <value>model</value>
+                <value>models</value>
             </array>
         </property>
 

@@ -1,4 +1,4 @@
-package model
+package models
 
 import java.lang.Long
 import javax.persistence._

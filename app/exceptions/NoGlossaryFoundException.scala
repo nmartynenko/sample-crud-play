@@ -1,4 +1,4 @@
-package exception
+package exceptions
 
 import java.lang.Long
 import scala.beans.BeanProperty

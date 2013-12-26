@@ -1,6 +1,6 @@
-package service
+package services
 
-import model.impl.User
+import models.impl.User
 
 trait UserService {
 

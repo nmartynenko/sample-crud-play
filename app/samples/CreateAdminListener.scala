@@ -1,11 +1,11 @@
-package sample
+package samples
 
 import javax.annotation.PostConstruct
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import service.UserService
-import model.impl.User
+import services.UserService
+import models.impl.User
 ;
 
 @Service

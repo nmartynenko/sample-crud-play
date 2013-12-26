@@ -1,11 +1,11 @@
-package service
+package services
 
 import java.lang.Long
 import org.springframework.data.domain.Page
 import org.springframework.security.access.prepost.PreAuthorize
 import scala.throws
-import exception.GlossaryException
-import model.impl.Glossary
+import exceptions.GlossaryException
+import models.impl.Glossary
 
 trait GlossaryService {
 

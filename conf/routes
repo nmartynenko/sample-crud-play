@@ -3,8 +3,8 @@
 # ~~~~
 
 # Home page
-GET        /                    @controllers.HtmlController.index
-GET        /index.html          @controllers.HtmlController.index
+GET        /                    @controllers.GlossariesController.index
+GET        /index.html          @controllers.GlossariesController.getGlossaries(startRow: Int ?= 0, pageSize: Int ?= 2)
 
 #Glossaries pages
 

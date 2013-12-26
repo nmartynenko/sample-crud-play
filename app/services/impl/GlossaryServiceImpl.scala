@@ -1,4 +1,4 @@
-package service.impl
+package services.impl
 
 import java.lang.Long
 import org.springframework.beans.factory.annotation.Autowired
@@ -7,9 +7,9 @@ import org.springframework.data.domain.{Page, PageRequest,Pageable}
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import persistence.GlossaryPersistence
-import model.impl.Glossary
-import exception.{NoGlossaryFoundException, GlossaryException}
-import service.GlossaryService
+import models.impl.Glossary
+import exceptions.{NoGlossaryFoundException, GlossaryException}
+import services.GlossaryService
 
 @Service
 class GlossaryServiceImpl extends GlossaryService {
