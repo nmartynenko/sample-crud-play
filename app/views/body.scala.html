@@ -1,0 +1,44 @@
+<body>
+    <div id="header">
+        <div>
+            <span class="userGreeting">
+                @Messages("sample.message.welcome")&nbsp;TODO
+            </span>
+            <a href="/logout">@Messages("sample.message.logout")</a>
+        </div>
+        <div>
+            <span>@Messages("sample.message.change.locale")</span>
+            <a href="locale.html?lang=en">@Messages("sample.message.locale.en")</a>
+            <a href="locale.html?lang=ru">@Messages("sample.message.locale.ru")</a>
+        </div>
+    </div>
+
+    <br/>
+
+    <div id="content">
+
+        <div id="dialog"></div>
+
+        <table id="jqTable">
+            <thead>
+                <tr>
+                    <th>@Messages("sample.message.id")</th>
+                    <th>@Messages("sample.message.name")</th>
+                    <th>@Messages("sample.message.description")</th>
+                    @*<security:authorize access="hasRole('ADMIN')">*@
+                        <th>@Messages("sample.message.actions")</th>
+                    @*</security:authorize>*@
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        @*<security:authorize access="hasRole('ADMIN')">*@
+            <div>
+                <input type="button" value="@Messages("sample.message.add")" class="edit" data-id="0">
+            </div>
+        @*</security:authorize>*@
+
+    </div>
+
+</body>

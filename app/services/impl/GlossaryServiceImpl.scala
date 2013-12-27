@@ -1,14 +1,14 @@
 package services.impl
 
+import exceptions.{NoGlossaryFoundException, GlossaryException}
 import java.lang.Long
+import models.impl.Glossary
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.{Page, PageRequest,Pageable}
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
 import persistence.GlossaryPersistence
-import models.impl.Glossary
-import exceptions.{NoGlossaryFoundException, GlossaryException}
 import services.GlossaryService
 
 @Service

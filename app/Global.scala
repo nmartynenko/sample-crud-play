@@ -1,7 +1,6 @@
-import play._
-
 import org.springframework.context._
 import org.springframework.context.support._
+import play._
 
 class Global extends GlobalSettings {
 

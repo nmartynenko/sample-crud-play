@@ -46,6 +46,9 @@ libraryDependencies += "org.hibernate" % "hibernate-entitymanager" % "4.3.0.Fina
 
 libraryDependencies += "org.hsqldb" % "hsqldb" % "2.3.1"
 
+//jackson
+libraryDependencies += "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.3.0"
+
 //enable JDBC module for the project
 libraryDependencies += jdbc
 

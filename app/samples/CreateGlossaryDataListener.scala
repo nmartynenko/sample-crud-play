@@ -1,12 +1,12 @@
 package samples
 
 import javax.annotation.PostConstruct
+import models.impl.Glossary
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import scala.util.Random
 import persistence.GlossaryPersistence
-import models.impl.Glossary
+import scala.util.Random
 
 @Service
 class CreateGlossaryDataListener {

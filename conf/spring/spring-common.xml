@@ -12,5 +12,30 @@
     <context:property-placeholder location="classpath:/application.conf"/>
 
     <context:component-scan base-package="controllers, services"/>
+    
+    <!--Object mapper-->
+    <bean name="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean" autowire="no">
+        <property name="dateFormat" ref="jsonDateFormat"/>
+        <property name="featuresToDisable">
+            <list>
+                <value type="com.fasterxml.jackson.databind.SerializationFeature">FAIL_ON_EMPTY_BEANS</value>
+                <value type="com.fasterxml.jackson.databind.DeserializationFeature">FAIL_ON_UNKNOWN_PROPERTIES</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean name="jsonDateFormat" class="java.text.SimpleDateFormat">
+        <constructor-arg value="dd-MM-yyyy HH:mm:ss z"/>
+        <property name="timeZone" ref="gmtTimeZone"/>
+    </bean>
+
+    <bean name="gmtTimeZone" class="java.util.TimeZone" factory-method="getTimeZone">
+        <constructor-arg value="GMT"/>
+    </bean>
+
+    <!--Initialize Scala module-->
+    <bean class="com.aimprosoft.scala.contrib.spring.jackson.ScalaJacksonConfigurer">
+        <property name="objectMapper" ref="objectMapper"/>
+    </bean>
 
 </beans>

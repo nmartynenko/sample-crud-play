@@ -1,10 +1,10 @@
 package services.impl
 
+import models.impl.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.{NoOpPasswordEncoder, PasswordEncoder}
 import org.springframework.stereotype.Service
 import persistence.UserPersistence
-import models.impl.User
 import services.UserService
 
 

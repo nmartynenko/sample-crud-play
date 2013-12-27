@@ -1,8 +1,8 @@
 package models.impl
 
 import javax.persistence._
-import scala.beans.BeanProperty
 import models.BusinessModel
+import scala.beans.BeanProperty
 
 
 @Entity

@@ -3,10 +3,16 @@
 # ~~~~
 
 # Home page
-GET        /                    @controllers.GlossariesController.index
-GET        /index.html          @controllers.GlossariesController.getGlossaries(startRow: Int ?= 0, pageSize: Int ?= 2)
+GET        /                    @controllers.HtmlController.home
+GET        /index.html          @controllers.HtmlController.index
+GET        /locale.html          @controllers.HtmlController.changeLocale(lang: String ?= "en")
 
 #Glossaries pages
+GET        /glossaries          @controllers.GlossariesRestController.getGlossaries(startRow: Int ?= 0, pageSize: Int ?= 2)
+GET        /glossaries/:id      @controllers.GlossariesRestController.getGlossary(id: Long)
+#PUT        /glossaries          @controllers.GlossariesRestController.saveGlossary
+#POST       /glossaries          @controllers.GlossariesRestController.updateGlossary
+DELETE     /glossaries/:id      @controllers.GlossariesRestController.removeGlossary(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file        controllers.Assets.at(path="/public", file)

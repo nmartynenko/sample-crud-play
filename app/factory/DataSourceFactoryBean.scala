@@ -1,9 +1,9 @@
 package factory
 
-import org.springframework.beans.factory.FactoryBean
 import javax.sql.DataSource
-import play.api.db.DB
+import org.springframework.beans.factory.FactoryBean
 import play.api.Play.current
+import play.api.db.DB
 
 class DataSourceFactoryBean extends FactoryBean[DataSource]{
   

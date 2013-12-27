@@ -1,11 +1,11 @@
 package samples
 
 import javax.annotation.PostConstruct
+import models.impl.User
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import services.UserService
-import models.impl.User
 
 @Service
 class CreateUserListener {
