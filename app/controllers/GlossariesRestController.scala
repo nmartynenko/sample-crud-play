@@ -1,6 +1,5 @@
 package controllers
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import models.impl.Glossary
 import org.springframework.beans.factory.annotation.Autowired
 import play.api.mvc._
@@ -8,10 +7,7 @@ import services.GlossaryService
 import vo.GlossaryList
 
 @MVCController
-class GlossariesRestController extends Controller{
-
-  @Autowired
-  private val objectMapper: ObjectMapper = null
+class GlossariesRestController extends BaseController{
 
   @Autowired
   private val glossaryService: GlossaryService = null
@@ -31,6 +27,10 @@ class GlossariesRestController extends Controller{
 
   def updateGlossary(glossary: Glossary) = TODO
 
-  def removeGlossary(glossaryId: Long) = TODO
+  def removeGlossary(glossaryId: Long) = Action {
+    glossaryService.removeGlossaryById(glossaryId)
+
+    Ok
+  }
 
 }

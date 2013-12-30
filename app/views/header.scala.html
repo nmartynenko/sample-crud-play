@@ -1,8 +1,7 @@
 <head>
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-
     <title>@Messages("sample.message.index.title")</title>
+
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 
     <link type="text/css" href="@routes.Assets.at("stylesheets/jquery-ui.css")" rel="stylesheet"/>
     <link type="text/css" href="@routes.Assets.at("stylesheets/jquery.dataTables.css")" rel="stylesheet"/>
@@ -19,32 +18,9 @@
     <script type="text/javascript" src="@routes.Assets.at("javascripts/handlebars.js")"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
 
-    @*Template for CRUD links*@
-    <script type="text/x-handlebars-template" id="editLink">
-        <a href='#' class="edit" data-id='{{data}}'>@Messages("sample.message.edit")</a>
-        <a href='#' class="remove" data-id='{{data}}'>@Messages("sample.message.delete")</a>
-    </script>
+    @actions()
 
-    @*Template for edit form*@
-    <script type="text/x-handlebars-template" id="editGlossaryForm">
-
-        <form>
-            <input type="hidden" name="id" value="{{id}}">
-            <div>
-                <label for="name">@Messages("sample.message.name")</label>
-                <input type="text" id="name" name="name" value="{{name}}" class="required">
-            </div>
-            <div>
-                <label for="name">@Messages("sample.message.description")</label>
-                <input type="text" id="description" name="description" value="{{description}}" class="required">
-            </div>
-
-            <div>
-                <input type="submit" value="@Messages("sample.message.save")">
-            </div>
-        </form>
-
-    </script>
+    @edit()
 
     <script type="text/javascript">
         jQuery(document).ready(function($){
