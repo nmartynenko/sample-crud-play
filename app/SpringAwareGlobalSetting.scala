@@ -1,7 +1,8 @@
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.lang.{reflect => jreflect}
+import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context._
 import org.springframework.context.support._
-import org.springframework.util.MethodInvoker
 import org.springframework.web.bind.annotation.{ResponseBody, ResponseStatus}
 import org.springframework.web.method.annotation.ExceptionHandlerMethodResolver
 import org.springframework.web.method.ControllerAdviceBean
@@ -15,11 +16,11 @@ import scala.collection.JavaConversions._
 
 object SpringAwareGlobalSetting extends GlobalSettings {
 
-  private type Invokable = {def invoke(o: Object):  Object}
-
   private var ctx: ConfigurableApplicationContext = null
 
   private var resolvers: List[(ControllerAdviceBean, ExceptionHandlerMethodResolver)] = null
+
+  private var objectMapper: ObjectMapper = null
 
   override def onStart(app: Application) {
     Logger.info("Initialize Spring context for Play application")
@@ -39,6 +40,15 @@ object SpringAwareGlobalSetting extends GlobalSettings {
     }
 
     Logger.info(s"Found $resolvers.size resolvers")
+
+    try {
+      Logger.info("Try to find ObjectMapper for JSON converting")
+      objectMapper = ctx.getBean(classOf[ObjectMapper])
+      Logger.info("ObjectMapper is successfully found")
+    } catch {
+      case ignore: NoSuchBeanDefinitionException =>
+        Logger.info("No ObjectMapper bean was found")
+    }
   }
 
   override def getControllerInstance[A](controllerClass: Class[A]): A = {
@@ -63,7 +73,7 @@ object SpringAwareGlobalSetting extends GlobalSettings {
         case responseStatus: ResponseStatus =>
           val status = responseStatus.value()
 
-          //return status as it is required by Annotation
+          //return status as it is required by annotation
           new Results.Status(status.value())
         //return InternalServerError by default
         case _ =>
@@ -98,9 +108,12 @@ object SpringAwareGlobalSetting extends GlobalSettings {
           val method = resolver.resolveMethod(e)
           val targetBean = advice.resolveBean
 
-          //if @ResponseBody is not present, then fire a fail
-          if (!method.isAnnotationPresent(classOf[ResponseBody])){
-            throw new NotImplementedError("Right now only @ResponseBody handlers are supported.")
+          //if returning type is not SimpleResult
+          if (!classOf[SimpleResult].isAssignableFrom(method.getDeclaringClass) &&
+            //if @ResponseBody is not present, then fire a fail
+            !method.isAnnotationPresent(classOf[ResponseBody])){
+
+            throw new NotImplementedError("Right now only @ResponseBody handlers are supported for any returning type, except SimpleResult.")
           }
 
           //figure out response status
@@ -109,10 +122,20 @@ object SpringAwareGlobalSetting extends GlobalSettings {
           //invoke method
           val invoke = invokeMethod(method, targetBean, e)
           invoke match {
+            //if returning type is Java's Void
+            case obj if obj == null && method.getReturnType.equals(Void.TYPE)=>
+              Some(Future.successful(status))
+            //if it returns String
             case content: String =>
               Some(Future.successful(status(content)))
+            case result: SimpleResult =>
+              //ignore status for SimpleResult
+              Some(Future.successful(result))
+            case obj if objectMapper != null  =>
+              //try to convert return instance into Plain representation
+              Some(Future.successful(status(objectMapper.writeValueAsString(obj))))
             case _ =>
-              throw new NotImplementedError("Right now only handlers with return type String are supported")
+              throw new NotImplementedError(s"Could not return result for method $method.getDeclaredClass.getName#$method.getName")
           }
         //if didn't find anything, then return None
         case None =>
