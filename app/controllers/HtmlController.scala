@@ -10,11 +10,8 @@ class HtmlController extends Controller{
 
   def home() = Action {HOME}
 
-  def index() = Action {
-    Ok(views.html.index())
+  def index(lang: String = "en") = Action {request =>
+    Ok(views.html.index()(Lang(lang)))
   }
 
-  def changeLocale(lang: String = "en") = Action {
-    HOME.withLang(Lang(lang))
-  }
 }

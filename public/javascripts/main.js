@@ -217,7 +217,11 @@
                     data : JSON.stringify(data)
                 })
                 .done(function(){
-                    controller._refreshTable();
+                    //refresh datatable
+                    controller._dataTable.fnDraw(false);
+
+                    //close popup
+                    controller.dialog.dialog("close");
                 })
                 .fail(function(){
                     alert(Globalize.localize("sample.js.error.update", controller.locale));
@@ -238,16 +242,6 @@
                 .fail(function(){
                     alert(Globalize.localize("sample.js.error.delete", controller.locale));
                 });
-        },
-
-        _refreshTable: function(){
-            var controller = this;
-
-            //close popup
-            controller.dialog.dialog("close");
-
-            //refresh datatable
-            controller._dataTable.fnDraw(false)
         }
 });
 

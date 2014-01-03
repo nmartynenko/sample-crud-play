@@ -1,3 +1,4 @@
+@()(implicit lang: Lang)
 <head>
     <title>@Messages("sample.message.index.title")</title>
 
@@ -30,10 +31,10 @@
             //setup locales
             Globalize.addCultureInfo ("en", {
                 messages : {
-                    "sample.js.message.confirm.deleting" : "@Messages("sample.js.message.confirm.deleting ")",
-                    "sample.js.error.delete" : "@Messages("sample.js.error.delete ")",
-                    "sample.js.error.retrieve" : "@Messages("sample.js.error.retrieve ")",
-                    "sample.js.error.update" : "@Messages("sample.js.error.update ")"
+                    "sample.js.message.confirm.deleting" : "@Messages("sample.js.message.confirm.deleting")",
+                    "sample.js.error.delete" : "@Messages("sample.js.error.delete")",
+                    "sample.js.error.retrieve" : "@Messages("sample.js.error.retrieve")",
+                    "sample.js.error.update" : "@Messages("sample.js.error.update")"
                 }
             });
 

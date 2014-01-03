@@ -1,3 +1,4 @@
+@()(implicit lang: Lang)
 <body>
     <div id="header">
         <div>
@@ -8,8 +9,8 @@
         </div>
         <div>
             <span>@Messages("sample.message.change.locale")</span>
-            <a href="locale.html?lang=en">@Messages("sample.message.locale.en")</a>
-            <a href="locale.html?lang=ru">@Messages("sample.message.locale.ru")</a>
+            <a href="?lang=en">@Messages("sample.message.locale.en")</a>
+            <a href="?lang=ru">@Messages("sample.message.locale.ru")</a>
         </div>
     </div>
 

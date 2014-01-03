@@ -16,9 +16,7 @@ class GlossaryControllerAdvice extends BaseController {
   @ExceptionHandler(value = Array(classOf[NoGlossaryFoundException]))
   @ResponseBody
   def handleNoGlossaryFoundException(e: NoGlossaryFoundException) = {
-//    Messages("sample.error.glossary.not.found", e.getModelId)
-//    InternalServerError(views.html.play20.welcome("Hello!"))
-    Map("preved" -> "medved")
+    Messages("sample.error.glossary.not.found", e.getModelId)
   }
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)

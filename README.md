@@ -80,3 +80,11 @@ For launching application you must to have installed:
 ### Known Issues ###
 This application is for training purposes of technologies listed above.
 The only issues may happen if there is wrong environment to launch the application.
+
+###TODO###
+
+* add validation
+
+* security should work
+
+* probably improve Play philosophy
