@@ -5,7 +5,7 @@ import scala.util.Random
 import services.GlossaryService
 import models.Glossary
 
-class CreateGlossaryDataListener {
+object CreateGlossaryDataListener extends Listener {
   
   private def tear(separator: String)(string: String) = {
     string

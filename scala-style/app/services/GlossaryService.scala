@@ -6,7 +6,7 @@ import models.Glossary
 
 trait GlossaryService {
 
-  def getCurrentPage(startRow: Int, pageSize: Int): List[Glossary]
+  def getCurrentPage(startRow: Int, pageSize: Int): Seq[Glossary]
 
   def getGlossaryById(glossaryId: Long): Glossary
 

@@ -4,7 +4,7 @@ import play.api.Logger
 import services.UserService
 import models.User
 
-class CreateUserListener {
+object CreateUserListener extends Listener {
 
   def init() {
     Logger.info("Start adding sample user")

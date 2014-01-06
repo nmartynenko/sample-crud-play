@@ -4,7 +4,7 @@ import services.UserService
 import play.api.Logger
 import models.User
 
-class CreateAdminListener {
+object CreateAdminListener extends Listener{
 
   def init() {
     Logger.info("Start adding sample admin")

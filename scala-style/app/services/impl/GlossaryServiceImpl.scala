@@ -1,22 +1,39 @@
 package services.impl
 
 import java.lang.Long
-import services.GlossaryService
 import models.Glossary
 import persistence.GlossaryPersistence
+import play.api.Play.current
+import play.api.db.slick.DB
+import play.api.db.slick.Session
+import services.GlossaryService
 
-//todo move transaction layer here
 class GlossaryServiceImpl extends GlossaryService {
 
-  def getCurrentPage(startRow: Int, pageSize: Int): List[Glossary] = ???
+  def getCurrentPage(startRow: Int, pageSize: Int): Seq[Glossary] = DB.withSession {
+    implicit session: Session =>
+      GlossaryPersistence.list(startRow, pageSize)
+  }
 
-  def getGlossaryById(glossaryId: Long): Glossary = GlossaryPersistence.get(glossaryId)
+  def getGlossaryById(glossaryId: Long): Glossary = DB.withSession {
+    implicit session: Session =>
+      GlossaryPersistence.get(glossaryId)
+  }
 
-  def addGlossary(glossary: Glossary): Unit = ???
+  def addGlossary(glossary: Glossary): Unit = DB.withTransaction {
+    implicit session: Session =>
+      GlossaryPersistence.insert(glossary)
+  }
 
-  def updateGlossary(glossary: Glossary): Unit = ???
+  def updateGlossary(glossary: Glossary): Unit = DB.withTransaction {
+    implicit session: Session =>
+      GlossaryPersistence.update(glossary.id, glossary)
+  }
 
-  def removeGlossary(glossary: Glossary): Unit = ???
+  def removeGlossary(glossary: Glossary): Unit = removeGlossaryById(glossary.id)
 
-  def removeGlossaryById(glossaryId: Long): Unit = ???
+  def removeGlossaryById(glossaryId: Long): Unit = DB.withTransaction {
+    implicit session: Session =>
+      GlossaryPersistence.delete(glossaryId)
+  }
 }
