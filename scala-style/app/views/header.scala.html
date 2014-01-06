@@ -1,0 +1,78 @@
+@()(implicit lang: Lang)
+<head>
+    <title>@Messages("sample.message.index.title")</title>
+
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+
+    <link type="text/css" href="@routes.Assets.at("stylesheets/jquery-ui.css")" rel="stylesheet"/>
+    <link type="text/css" href="@routes.Assets.at("stylesheets/jquery.dataTables.css")" rel="stylesheet"/>
+    <link type="text/css" href="@routes.Assets.at("stylesheets/main.css")" rel="stylesheet"/>
+
+    @*Fallback for older browsers*@
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/json2.js")"></script>
+
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/globalize.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-ui.min.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery.dataTables.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery.validate.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/handlebars.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
+
+    @actions()
+
+    @edit()
+
+    <script type="text/javascript">
+        jQuery(document).ready(function($){
+            //Actions dockbar for data-table
+            var mRenderFn = Handlebars.compile($("#editLink" ).html());
+
+            //setup locales
+            Globalize.addCultureInfo ("en", {
+                messages : {
+                    "sample.js.message.confirm.deleting" : "@Messages("sample.js.message.confirm.deleting")",
+                    "sample.js.error.delete" : "@Messages("sample.js.error.delete")",
+                    "sample.js.error.retrieve" : "@Messages("sample.js.error.retrieve")",
+                    "sample.js.error.update" : "@Messages("sample.js.error.update")"
+                }
+            });
+
+            //create instance of page controller
+            var controller = new GlossaryController({
+                locale : "en",
+                containerId : "content",
+                popupId : "dialog",
+                templateId : "editGlossaryForm",
+                tableOpts : {
+                sAjaxSource : "/glossaries",
+                sAjaxDataProp : "content",
+                bProcessing : true,
+                bServerSide : true,
+                bFilter : false,
+                iDisplayStart : 0,
+                iDisplayLength : @play.api.Play.current.configuration.getInt("paginator.default.pageSize"),
+                sPaginationType : "full_numbers",
+                    aoColumns : [
+                        { mData: "id" ,bSortable: false},
+                        { mData: "name", bSortable: false },
+                        { mData: "description", bSortable: false }
+//                        <security:authorize access="hasRole('ADMIN')">
+                        //edit links (only for admins)
+                        ,{
+                            mData: "id",
+                            bSortable: false,
+                            mRender: function(data){
+                                return mRenderFn({
+                                    data : data
+                                });
+                            }
+                        }
+//                        </security:authorize>
+                    ],
+                    aLengthMenu: [2, 3, 5]
+                }
+            });
+        });
+    </script>
+</head>
