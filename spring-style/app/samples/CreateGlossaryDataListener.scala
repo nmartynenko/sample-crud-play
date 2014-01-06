@@ -2,10 +2,10 @@ package samples
 
 import javax.annotation.PostConstruct
 import models.impl.Glossary
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import persistence.GlossaryPersistence
+import play.api.Logger
 import scala.util.Random
 
 @Service
@@ -39,15 +39,13 @@ class CreateGlossaryDataListener {
     molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"""
   }
 
-  private val _logger = LoggerFactory.getLogger(getClass)
-
   @Autowired
   private val glossaryPersistence: GlossaryPersistence = null
 
   @PostConstruct
   @throws[Exception]
   def init() {
-    _logger.info("Start adding sample glossaries")
+    Logger.info("Start adding sample glossaries")
 
     val random = new Random()
 
@@ -62,6 +60,6 @@ class CreateGlossaryDataListener {
       glossaryPersistence.save(glossary)
     }
 
-    _logger.info("End adding sample glossaries")
+    Logger.info("End adding sample glossaries")
   }
 }

@@ -2,15 +2,13 @@ package samples
 
 import javax.annotation.PostConstruct
 import models.impl.User
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import play.api.Logger
 import services.UserService
 
 @Service
 class CreateUserListener {
-
-  private val _logger = LoggerFactory.getLogger(getClass)
 
   @Autowired
   private val userService: UserService = null
@@ -18,7 +16,7 @@ class CreateUserListener {
   @PostConstruct
   @throws[Exception]
   def init() {
-    _logger.info("Start adding sample user")
+    Logger.info("Start adding sample user")
 
     val user = new User()
     user.email = "user@example.com"
@@ -29,6 +27,6 @@ class CreateUserListener {
 
     userService.addUser(user)
 
-    _logger.info("Sample user has been added successfully")
+    Logger.info("Sample user has been added successfully")
   }
 }

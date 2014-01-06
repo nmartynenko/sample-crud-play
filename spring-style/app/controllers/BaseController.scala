@@ -1,8 +1,8 @@
 package controllers
 
-import play.api.mvc.Controller
-import org.springframework.beans.factory.annotation.Autowired
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.beans.factory.annotation.Autowired
+import play.api.mvc.Controller
 
 abstract class BaseController extends Controller {
 

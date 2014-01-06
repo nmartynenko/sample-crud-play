@@ -1,8 +1,7 @@
 package controllers
 
-import play.api.mvc._
 import play.api.i18n.Lang
-import play.api.Play.current
+import play.api.mvc._
 
 @MVCController
 class HtmlController extends Controller{

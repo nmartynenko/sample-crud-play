@@ -8,7 +8,6 @@ GET        /index.html          @controllers.HtmlController.index(lang: String ?
 
 #Glossaries pages
 GET        /glossaries          @controllers.GlossariesRestController.getGlossaries(startRow: Int ?= 0, pageSize: Int ?= 2)
-GET        /glossaries/         @controllers.GlossariesRestController.getGlossaries(startRow: Int ?= 0, pageSize: Int ?= 2)
 GET        /glossaries/:id      @controllers.GlossariesRestController.getGlossary(id: Long)
 PUT        /glossaries          @controllers.GlossariesRestController.saveGlossary
 POST       /glossaries          @controllers.GlossariesRestController.updateGlossary
