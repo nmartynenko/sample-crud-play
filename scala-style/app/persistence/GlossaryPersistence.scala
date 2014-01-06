@@ -1,5 +1,0 @@
-package persistence
-
-trait GlossaryPersistence {
-
-}

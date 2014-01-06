@@ -10,11 +10,4 @@ trait UserService {
   def getUserByEmail(username: String): User
 }
 
-object UserService extends UserService {
-  //assign default implementation
-  private def IMPL = UserServiceImpl
-
-  def addUser(user: User) = IMPL.addUser(user)
-
-  def getUserByEmail(username: String): User = IMPL.getUserByEmail(username)
-}
+object UserService extends UserServiceImpl with UserService
