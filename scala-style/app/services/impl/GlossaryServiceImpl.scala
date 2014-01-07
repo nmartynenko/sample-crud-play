@@ -7,12 +7,16 @@ import play.api.Play.current
 import play.api.db.slick.DB
 import play.api.db.slick.Session
 import services.GlossaryService
+import vo.PageResponse
 
 class GlossaryServiceImpl extends GlossaryService {
 
-  def getCurrentPage(startRow: Int, pageSize: Int): Seq[Glossary] = DB.withSession {
-    implicit session: Session =>
-      GlossaryPersistence.list(startRow, pageSize)
+  def getCurrentPage(startRow: Int, pageSize: Int): PageResponse = DB.withSession {
+    implicit session: Session => {
+
+      //todo
+      PageResponse(GlossaryPersistence.list(startRow, pageSize), startRow, pageSize)
+    }
   }
 
   def getGlossaryById(glossaryId: Long): Glossary = DB.withSession {

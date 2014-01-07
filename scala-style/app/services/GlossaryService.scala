@@ -3,10 +3,11 @@ package services
 import java.lang.Long
 import services.impl.GlossaryServiceImpl
 import models.Glossary
+import vo.PageResponse
 
 trait GlossaryService {
 
-  def getCurrentPage(startRow: Int, pageSize: Int): Seq[Glossary]
+  def getCurrentPage(startRow: Int, pageSize: Int): PageResponse
 
   def getGlossaryById(glossaryId: Long): Glossary
 

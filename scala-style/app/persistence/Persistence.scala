@@ -5,12 +5,16 @@ import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.DB
 import models._
 import scala.slick.driver.ExtendedDriver
+import exceptions.{NoUserFoundException, NoGlossaryFoundException}
+import scala.slick.lifted
 
 trait Persistence[T <: AnyRef {val id : Option[Long]}] {
 
   def ddlCreate(): Unit
 
   def get(id: Long)(implicit session: Session): T
+
+  def list()(implicit session: Session): Seq[T]
 
   def list(startRow: Int = -1, pageSize: Int = -1)(implicit session: Session): Seq[T]
 
@@ -61,7 +65,27 @@ trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T]
 
   def get(id: Long)(implicit session: Session): T = byId(id).first
 
-  def list(startRow: Int, pageSize: Int)(implicit session: Session): Seq[T] = ???
+  def list()(implicit session: Session): Seq[T] = {
+    list(-1, -1)
+  }
+
+  def list(startRow: Int, pageSize: Int)(implicit session: Session): Seq[T] = {
+    //create query for retrieving of all entities
+    var q = tableToQuery(this).map(t => t)
+
+    //if it needs to be started from certain row
+    if (startRow > 0){
+      q = q.drop(startRow)
+    }
+
+    //if we need to get only certain number of rows
+    if (pageSize > 0) {
+      q = q.take(pageSize)
+    }
+
+    //perform query
+    q.list()
+  }
 
   def insert(entity: T)(implicit session: Session) = {
     autoInc.insert(entity)
@@ -122,6 +146,8 @@ class SlickUsers extends Table[User]("glossary_user")
   val byEmail = createFinderBy( t => t.email )
 
   def findByEmail(email: String)(implicit session: Session): User = {
-    byEmail(email).first
+    byEmail(email).firstOption getOrElse {
+      throw new NoUserFoundException(username = email)
+    }
   }
 }

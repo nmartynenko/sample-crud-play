@@ -1,15 +1,21 @@
 package controllers
 
+import models.Glossary
+import play.api.libs.json.Json
 import play.api.mvc._
 import services.GlossaryService
-import play.api.libs.json.Json
-import models.Glossary
+import vo.PageResponse
 
-class GlossariesRestController extends Controller {
+class GlossariesRestController extends Controller{
 
-  implicit val glossaryFormat = Json.format[Glossary]
+  implicit val gf = Json.format[Glossary]
+  implicit val gpf = Json.format[PageResponse]
 
-  def getGlossaries(startRow: Int, pageSize: Int) = TODO
+  def getGlossaries(startRow: Int, pageSize: Int) = Action {
+    val glossariesPage = GlossaryService.getCurrentPage(startRow, pageSize)
+
+    Ok(Json.toJson(glossariesPage))
+  }
 
   def getGlossary(id: Long) = Action {
     val glossary = GlossaryService.getGlossaryById(id)
