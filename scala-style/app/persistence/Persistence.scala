@@ -6,7 +6,9 @@ import play.api.db.slick.DB
 import models._
 import scala.slick.driver.ExtendedDriver
 
-trait Persistence[T <: AnyRef {val id : Long}] {
+trait Persistence[T <: AnyRef {val id : Option[Long]}] {
+
+  def ddlCreate(): Unit
 
   def get(id: Long)(implicit session: Session): T
 
@@ -42,8 +44,14 @@ object UserPersistence extends SlickUsers with UserPersistence
  * @url http://manuel.bernhardt.io/2013/07/08/crud-trait-for-slick-models-in-the-play-framework/
  *
  */
-trait SlickBaseModel[T <: AnyRef {val id : Long}] extends Persistence[T] {
+trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T] {
   self: Table[T] =>
+
+  val byId = createFinderBy( t => t.id )
+
+  def ddlCreate(): Unit = DB.withSession {implicit session: Session =>
+    self.ddl.create
+  }
 
   def id: Column[Long]
 
@@ -51,7 +59,7 @@ trait SlickBaseModel[T <: AnyRef {val id : Long}] extends Persistence[T] {
 
   def autoInc = * returning id
 
-  def get(id: Long)(implicit session: Session): T = ???
+  def get(id: Long)(implicit session: Session): T = byId(id).first
 
   def list(startRow: Int, pageSize: Int)(implicit session: Session): Seq[T] = ???
 
@@ -86,13 +94,13 @@ class SlickGlossaries extends Table[Glossary]("glossary")
   with GlossaryPersistence
   with SlickBaseModel[Glossary] {
 
-  def id = column[Long]("id", O.PrimaryKey)
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
   def name = column[String]("name", O.NotNull)
 
   def description = column[String]("description")
 
-  def * = id ~ name ~ description <>(Glossary.apply _, Glossary.unapply _)
+  def * = id.? ~ name ~ description <> (Glossary.apply _, Glossary.unapply _)
 }
 
 class SlickUsers extends Table[User]("glossary_user")
@@ -109,9 +117,11 @@ class SlickUsers extends Table[User]("glossary_user")
 
   def role = column[String]("role")
 
-  def * = id ~ email ~ password ~ name ~ role <>(User.apply _, User.unapply _)
+  def * = id.? ~ email ~ password ~ name ~ role <> (User.apply _, User.unapply _)
+
+  val byEmail = createFinderBy( t => t.email )
 
   def findByEmail(email: String)(implicit session: Session): User = {
-    ???
+    byEmail(email).first
   }
 }

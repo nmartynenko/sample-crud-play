@@ -27,10 +27,10 @@ class GlossaryServiceImpl extends GlossaryService {
 
   def updateGlossary(glossary: Glossary): Unit = DB.withTransaction {
     implicit session: Session =>
-      GlossaryPersistence.update(glossary.id, glossary)
+      GlossaryPersistence.update(glossary.id.get, glossary)
   }
 
-  def removeGlossary(glossary: Glossary): Unit = removeGlossaryById(glossary.id)
+  def removeGlossary(glossary: Glossary): Unit = removeGlossaryById(glossary.id.get)
 
   def removeGlossaryById(glossaryId: Long): Unit = DB.withTransaction {
     implicit session: Session =>

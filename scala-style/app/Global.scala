@@ -7,7 +7,7 @@ object Global extends GlobalSettings{
     Logger.info("Pre-fill some data")
 
     //it might be better to improve scanning
-    val listeners = List(CreateAdminListener, CreateUserListener, CreateGlossaryDataListener)
+    val listeners = List(ApplicationDDLCreator, CreateAdminListener, CreateUserListener, CreateGlossaryDataListener)
     for(listener <- listeners){
       listener.init()
     }
