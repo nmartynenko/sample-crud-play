@@ -1,9 +1,8 @@
 package models.impl
 
 import javax.persistence._
-import models.BusinessModel
+import models.{UserRole, BusinessModel}
 import scala.beans.BeanProperty
-
 
 @Entity
 @Table(name = "glossary_user")
@@ -26,11 +25,8 @@ class User extends BusinessModel {
   var name: String = _
 
   @BeanProperty
-  var role: String = _
-/*
   @Enumerated(EnumType.STRING)
   var role: UserRole = _
-*/
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[User]
 

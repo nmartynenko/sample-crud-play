@@ -1,6 +1,7 @@
 package samples
 
 import javax.annotation.PostConstruct
+import models.UserRole
 import models.impl.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -22,8 +23,7 @@ class CreateAdminListener {
     user.email = "admin@example.com"
     user.password = "admin"
     user.name = "Sample Admin"
-//    user.role = UserRole.ADMIN
-    user.role = "ADMIN"
+    user.role = UserRole.ADMIN
 
     userService.addUser(user)
 
