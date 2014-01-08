@@ -1,4 +1,4 @@
-package samples
+package listeners
 
 import services.UserService
 import play.api.Logger

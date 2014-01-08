@@ -1,11 +1,11 @@
 package services.impl
 
+import domain.GlossaryPageResponse
 import java.lang.Long
 import models.Glossary
 import persistence.GlossaryPersistence
 import play.api.db.slick.Session
 import services.GlossaryService
-import domain.GlossaryPageResponse
 
 class GlossaryServiceImpl extends GlossaryService with SlickTransactional {
 

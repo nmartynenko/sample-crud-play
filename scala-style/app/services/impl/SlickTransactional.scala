@@ -1,12 +1,12 @@
 package services.impl
 
 import play.api.Play.current
-import play.api.db.slick.{Session, DB}
+import play.api.db.slick.{DB, Session}
 
 trait SlickTransactional {
 
-  def readOnly[T]: ((Session) => T) => T = DB.withSession
+  def readOnly[T]: (Session => T) => T = DB.withSession
 
-  def transactional[T]: ((Session) => T) => T = DB.withTransaction
+  def transactional[T]: (Session => T) => T = DB.withTransaction
 
 }

@@ -1,7 +1,10 @@
+import play.api.mvc.Results._
+import play.api.mvc._
 import play.api.{Logger, Application, GlobalSettings}
-import samples._
+import listeners._
+import scala.concurrent.Future
 
-object Global extends GlobalSettings{
+object Global extends GlobalSettings with ErrorHandlerProcessor{
 
   override def onStart(app: Application): Unit = {
     Logger.info("Pre-fill some data")
@@ -13,5 +16,15 @@ object Global extends GlobalSettings{
     }
 
     Logger.info("Initialization has ended")
+  }
+
+  override def onHandlerNotFound(request: RequestHeader): Future[SimpleResult] = {
+    Future.successful(NotFound(views.html.page404()))
+  }
+
+  override def onError(request: RequestHeader, ex: Throwable): Future[SimpleResult] = {
+    val handler = handleError(request, ex)
+
+    handler.getOrElse(super.onError(request, ex))
   }
 }

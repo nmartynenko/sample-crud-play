@@ -1,4 +1,4 @@
-package samples
+package listeners
 
 import persistence.{GlossaryPersistence, UserPersistence}
 import play.api.Play.current

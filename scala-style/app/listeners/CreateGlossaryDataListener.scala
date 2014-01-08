@@ -1,4 +1,4 @@
-package samples
+package listeners
 
 import org.slf4j.LoggerFactory
 import scala.util.Random

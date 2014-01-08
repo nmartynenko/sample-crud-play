@@ -10,8 +10,6 @@ import scala.slick.lifted
 
 trait Persistence[T <: AnyRef {val id : Option[Long]}] {
 
-  def ddlCreate(): Unit
-
   def get(id: Long)(implicit session: Session): T
 
   def list()(implicit session: Session): Seq[T]
@@ -53,10 +51,6 @@ trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T]
 
   val byId = createFinderBy( t => t.id )
 
-  def ddlCreate(): Unit = DB.withSession {implicit session: Session =>
-    self.ddl.create
-  }
-
   def id: Column[Long]
 
   def * : scala.slick.lifted.ColumnBase[T]
@@ -71,7 +65,7 @@ trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T]
 
   def list(startRow: Int, pageSize: Int)(implicit session: Session): Seq[T] = {
     //create query for retrieving of all entities
-    var q = tableToQuery(this).map(t => t)
+    var q = tableToQuery(self).map(t => t)
 
     //if it needs to be started from certain row
     if (startRow > 0){
@@ -97,18 +91,18 @@ trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T]
 
   def update(id: Long, entity: T)(implicit session: Session) {
     tableQueryToUpdateInvoker(
-      tableToQuery(this).where(_.id === id)
+      tableToQuery(self).where(_.id === id)
     ).update(entity)
   }
 
   def delete(id: Long)(implicit session: Session) {
     queryToDeleteInvoker(
-      tableToQuery(this).where(_.id === id)
+      tableToQuery(self).where(_.id === id)
     ).delete
   }
 
   def count(implicit session: Session) = {
-      Query(tableToQuery(this).length).first
+      Query(tableToQuery(self).length).first
   }
 
 }

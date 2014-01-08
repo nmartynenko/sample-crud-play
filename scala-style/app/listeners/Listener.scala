@@ -1,4 +1,4 @@
-package samples
+package listeners
 
 trait Listener {
   def init()

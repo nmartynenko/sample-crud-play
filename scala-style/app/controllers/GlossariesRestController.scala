@@ -1,10 +1,12 @@
 package controllers
 
+import domain.GlossaryPageResponse
 import models.Glossary
-import play.api.libs.json.Json
+import play.api.data.validation.ValidationError
+import play.api.i18n.{Lang, Messages}
+import play.api.libs.json._
 import play.api.mvc._
 import services.GlossaryService
-import domain.GlossaryPageResponse
 
 class GlossariesRestController extends Controller{
 
@@ -23,21 +25,36 @@ class GlossariesRestController extends Controller{
     Ok(Json.toJson(glossary))
   }
 
-  def saveGlossary() = Action(parse.json) {request =>
-    val glossary = request.body.as[Glossary]
+  private def saveUpdate(action: Glossary => Unit) = Action(parse.json) {
+    implicit request =>
+      request.body.validate[Glossary] match {
+        case JsSuccess(glossary, _) =>
+          action(glossary)
+          Ok
+        case JsError(errors) =>
+          val validationResponse = handleErrors(errors)
 
-    GlossaryService.addGlossary(glossary)
-
-    Ok
+          BadRequest(Json.toJson(validationResponse))
+      }
   }
 
-  def updateGlossary() = Action(parse.json) {request =>
-    val glossary = request.body.as[Glossary]
+  //use dot method call just as Martin Odersky recommends
+  //https://twitter.com/odersky/status/49882758968905728
+  private def handleErrors(errors: Seq[(JsPath, Seq[ValidationError])])(implicit lang: Lang): Map[String, Array[String]] = {
+    (errors map {
+      case (jsPath, validationErrors) =>
+        val key = jsPath.toString()
+        val value = validationErrors.map(valError => Messages(valError.message)).toArray
 
-    GlossaryService.updateGlossary(glossary)
-
-    Ok
+        //return tuple, which naturally transforms into map
+        (key, value)
+    }).toMap
   }
+
+
+  def updateGlossary() = saveUpdate {GlossaryService.updateGlossary}
+
+  def saveGlossary = saveUpdate {GlossaryService.addGlossary}
 
   def removeGlossary(glossaryId: Long) =  Action {
     GlossaryService.removeGlossaryById(glossaryId)
