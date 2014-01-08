@@ -79,7 +79,7 @@ trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T]
     }
 
     //if we need to get only certain number of rows
-    if (pageSize > 0) {
+    if (pageSize >= 0) {
       q = q.take(pageSize)
     }
 

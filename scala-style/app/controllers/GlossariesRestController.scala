@@ -4,12 +4,12 @@ import models.Glossary
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.GlossaryService
-import vo.PageResponse
+import domain.GlossaryPageResponse
 
 class GlossariesRestController extends Controller{
 
   implicit val gf = Json.format[Glossary]
-  implicit val gpf = Json.format[PageResponse]
+  implicit val gpf = Json.format[GlossaryPageResponse]
 
   def getGlossaries(startRow: Int, pageSize: Int) = Action {
     val glossariesPage = GlossaryService.getCurrentPage(startRow, pageSize)

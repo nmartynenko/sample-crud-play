@@ -209,6 +209,9 @@
 
             var data = $(form).serializeObject();
 
+            //small adjustment in order to handle numeric values
+            data.id = data.id ? null : parseInt(data.id);
+
             $.ajax({
                     url : controller.tableOpts.sAjaxSource,
                     //add/edit checking (POST - update, PUT - add
