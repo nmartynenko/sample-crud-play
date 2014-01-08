@@ -8,7 +8,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import services.GlossaryService
 
-class GlossariesRestController extends Controller{
+class GlossariesRestController extends SecuredController {
 
   implicit val gf = Json.format[Glossary]
   implicit val gpf = Json.format[GlossaryPageResponse]

@@ -6,6 +6,10 @@ version := "1.0"
 
 resolvers += "Sonatype" at "http://search.maven.org/remotecontent?filepath="
 
+resolvers += "Objectify Play Repository" at "http://schaloner.github.io/releases/"
+
+resolvers += "Objectify Play Snapshot Repository" at "http://schaloner.github.io/snapshots/"
+
 libraryDependencies ++= Seq(
   //test dependencies
   "org.scalatest" %% "scalatest" % "2.0" % "test",
@@ -14,6 +18,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % "1.0.1",
   "com.typesafe.play" %% "play-slick" % "0.5.0.8",
   "org.hsqldb" % "hsqldb" % "2.3.1",
+  //security
+  "be.objectify" %% "deadbolt-scala" % "2.2-RC2",
   //enable JDBC module for the project
   jdbc
 )
