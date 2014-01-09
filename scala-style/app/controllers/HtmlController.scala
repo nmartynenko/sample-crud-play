@@ -3,7 +3,7 @@ package controllers
 import play.api.i18n.Lang
 import play.api.mvc._
 
-class HtmlController extends SecuredController {
+object HtmlController extends SecuredController {
   private val HOME = Redirect("/index.html")
 
   def home() = Action {HOME}

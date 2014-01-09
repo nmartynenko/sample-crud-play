@@ -6,9 +6,9 @@ version := "1.0"
 
 resolvers += "Sonatype" at "http://search.maven.org/remotecontent?filepath="
 
-resolvers += "Objectify Play Repository" at "http://schaloner.github.io/releases/"
+resolvers += Resolver.url("Objectify Play Repository", url("http://schaloner.github.io/releases/"))(Resolver.ivyStylePatterns)
 
-resolvers += "Objectify Play Snapshot Repository" at "http://schaloner.github.io/snapshots/"
+resolvers += Resolver.url("Objectify Play Snapshot Repository", url("http://schaloner.github.io/snapshots/"))(Resolver.ivyStylePatterns)
 
 libraryDependencies ++= Seq(
   //test dependencies
