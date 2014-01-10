@@ -2,7 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
+#Login page
+GET        /login.html          controllers.LoginController.login
+GET        /logout              controllers.LoginController.logout
+POST       /login               controllers.LoginController.authenticate
+
+# Home page, needs authentication
 GET        /                    controllers.HtmlController.home
 GET        /index.html          controllers.HtmlController.index(lang: String ?= "en")
 

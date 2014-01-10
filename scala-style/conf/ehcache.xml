@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+
+    <!--Default cache settings-->
+    <defaultCache
+            maxElementsInMemory="0"
+            eternal="false"
+            timeToIdleSeconds="900"
+            timeToLiveSeconds="0"
+            overflowToDisk="false"/>
+
+</ehcache>

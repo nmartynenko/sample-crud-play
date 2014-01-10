@@ -9,5 +9,5 @@ class GlossaryException(message: String = null, cause: Throwable = null)
 class NoGlossaryFoundException(cause: Throwable = null, var modelId: Long)
   extends GlossaryException(null, cause)
 
-class NoUserFoundException[T](cause: Throwable = null, var username: T)
+class NoUserFoundException(cause: Throwable = null, var username: Serializable)
   extends ApplicationException(s"Nothing found by term $username", cause)

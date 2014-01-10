@@ -1,9 +1,9 @@
 package listeners
 
-import org.slf4j.LoggerFactory
+import models.Glossary
 import scala.util.Random
 import services.GlossaryService
-import models.Glossary
+import play.api.Logger
 
 object CreateGlossaryDataListener extends Listener {
   
@@ -35,10 +35,8 @@ object CreateGlossaryDataListener extends Listener {
     molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"""
   }
 
-  private val _logger = LoggerFactory.getLogger(getClass)
-
   def init() {
-    _logger.info("Start adding sample glossaries")
+    Logger.info("Start adding sample glossaries")
 
     val random = new Random()
 
@@ -48,12 +46,12 @@ object CreateGlossaryDataListener extends Listener {
 
       val glossary = new Glossary(
         name = TITLES(i),
-        description = DESCRIPTIONS(descIndex)
+        description = Some(DESCRIPTIONS(descIndex))
       )
 
       GlossaryService.addGlossary(glossary)
     }
 
-    _logger.info("End adding sample glossaries")
+    Logger.info("End adding sample glossaries")
   }
 }

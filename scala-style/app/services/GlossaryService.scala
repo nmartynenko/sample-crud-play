@@ -21,4 +21,4 @@ trait GlossaryService {
 
 }
 
-object GlossaryService extends GlossaryServiceImpl with GlossaryService
+object GlossaryService extends GlossaryServiceImpl

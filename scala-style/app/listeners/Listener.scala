@@ -1,5 +1,5 @@
 package listeners
 
 trait Listener {
-  def init()
+  def init(): Unit
 }

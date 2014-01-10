@@ -10,4 +10,4 @@ trait UserService {
   def getUserByEmail(username: String): User
 }
 
-object UserService extends UserServiceImpl with UserService
+object UserService extends UserServiceImpl

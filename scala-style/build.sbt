@@ -20,6 +20,7 @@ libraryDependencies ++= Seq(
   "org.hsqldb" % "hsqldb" % "2.3.1",
   //security
   "be.objectify" %% "deadbolt-scala" % "2.2-RC2",
+  "org.mindrot" % "jbcrypt" % "0.3m",
   //enable JDBC module for the project
   jdbc
 )

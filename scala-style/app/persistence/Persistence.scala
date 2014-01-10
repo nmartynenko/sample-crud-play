@@ -35,9 +35,9 @@ trait UserPersistence extends Persistence[User] {
 }
 
 //application DAO objects
-object GlossaryPersistence extends SlickGlossaries with GlossaryPersistence
+object GlossaryPersistence extends SlickGlossaries
 
-object UserPersistence extends SlickUsers with UserPersistence
+object UserPersistence extends SlickUsers
 
 /**
  * Helper for otherwise verbose Slick model definitions
@@ -118,7 +118,7 @@ class SlickGlossaries extends Table[Glossary]("glossary")
 
   def description = column[String]("description")
 
-  def * = id.? ~ name ~ description <> (Glossary.apply _, Glossary.unapply _)
+  def * = id.? ~ name ~ description.? <> (Glossary.apply _, Glossary.unapply _)
 }
 
 class SlickUsers extends Table[User]("glossary_user")
