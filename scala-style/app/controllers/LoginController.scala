@@ -6,6 +6,7 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
 import security.{GlossaryUserSubject, SecurityUserService}
+import play.api.Logger
 
 object LoginController extends SecuredController {
 
@@ -28,7 +29,9 @@ object LoginController extends SecuredController {
     if (auth.isEmpty) false
     else {
       //put auth in the session
-      Cache.set(auth.get.getIdentifier, auth)
+      Logger.debug(s"Put value $auth for $username")
+
+      Cache.set(auth.get.getIdentifier, auth.get)
 
       true
     }

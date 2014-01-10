@@ -7,6 +7,7 @@ import play.api.Play.current
 import play.api.mvc.{Security, SimpleResult, Request}
 import scala.concurrent.Future
 import play.api.cache.Cache
+import play.api.Logger
 
 object GlossaryUserDeadboltHandler extends DeadboltHandler {
 
@@ -15,14 +16,21 @@ object GlossaryUserDeadboltHandler extends DeadboltHandler {
   private val handlerOption = Some(GlossaryDynamicResourceHandler)
 
   def beforeAuthCheck[A](request: Request[A]): Option[Future[SimpleResult]] = {
+    def login = Some(Future.successful(loginPage))
+
     //get username from session
     request.session.get(Security.username) match {
       //redirect to login page if there is no username
       case None =>
-        Some(Future.successful(loginPage))
-      //validation of username will happen a bit later
-      case _ =>
-        None
+        login
+      case Some(username) =>
+        //validate username
+        Cache.get(username) match {
+          case None =>
+            login
+          case _ =>
+            None
+        }
     }
   }
 
@@ -30,8 +38,11 @@ object GlossaryUserDeadboltHandler extends DeadboltHandler {
     //session should be present
     val username = request.session(Security.username)
 
-    //todo find out why this doesn't work in reality
-    Cache.getAs[Subject](username)
+    val fromCache = Cache.getAs[Subject](username)
+
+    Logger.debug(s"Getting value for $username, and it returns $fromCache")
+
+    fromCache
   }
 
   def onAuthFailure[A](request: Request[A]): Future[SimpleResult] = Future.successful {
