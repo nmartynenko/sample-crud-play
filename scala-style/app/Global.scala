@@ -1,3 +1,4 @@
+import mapper.ErrorHandlerProcessor
 import play.api.mvc.Results._
 import play.api.mvc._
 import play.api.{Logger, Application, GlobalSettings}
@@ -23,8 +24,9 @@ object Global extends GlobalSettings with ErrorHandlerProcessor{
   }
 
   override def onError(request: RequestHeader, ex: Throwable): Future[SimpleResult] = {
-    val handler = handleError(request, ex)
+    val handler = handleError(ex, request)
 
     handler.getOrElse(super.onError(request, ex))
   }
+
 }

@@ -8,7 +8,7 @@
         <div>
             <span class="userGreeting">
                 @Messages("sample.message.welcome")&nbsp;
-                @handler.getSubject(request).get.getIdentifier
+                @handler.getSubject(request).get.toString
             </span>
             <a href="/logout">@Messages("sample.message.logout")</a>
         </div>

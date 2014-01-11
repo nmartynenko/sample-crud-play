@@ -12,15 +12,13 @@ class GlossaryUserSubject(val user: User) extends Subject with Serializable{
 
   private val roles: util.List[SimpleRole] = GlossaryRoles(user.role)
 
-  private val identifier: String = GlossaryUserSubject.generateIdentifier(user.email)
-
   def getRoles: util.List[_ <: Role] = roles
 
   def getPermissions: util.List[_ <: Permission] = util.Collections.emptyList()
 
   def getIdentifier: String = user.email
 
-  override def toString: String = s"GlossaryUserSubject($identifier)"
+  override def toString: String = user.name
 }
 
 object GlossaryUserSubject{

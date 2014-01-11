@@ -10,9 +10,11 @@ object HtmlController extends SecuredController {
 
   def index(lang: String = "en") = authenticated {
     Action {implicit request =>
+      implicit val language = Lang(lang)
+
       Ok(
         views.html.index(SubjectPresentGlossaryUserDeadboltHandler)
-      ).withLang(Lang(lang))
+      ).withLang(language)
     }
   }
 
