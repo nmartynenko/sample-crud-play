@@ -15,6 +15,10 @@ sealed trait AllowAllDynamicResourceHandler extends DynamicResourceHandler {
   def checkPermission[A](permissionValue: String, deadboltHandler: DeadboltHandler, request: Request[A]): Boolean = true
 }
 
+object RejectAllDynamicResourceHandler extends RejectAllDynamicResourceHandler
+
+object AllowAllDynamicResourceHandler extends AllowAllDynamicResourceHandler
+
 object RoleBasedDynamicResourceHandler extends RejectAllDynamicResourceHandler {
 
   //Java2Scala conversions and vice versa
@@ -31,10 +35,6 @@ object RoleBasedDynamicResourceHandler extends RejectAllDynamicResourceHandler {
     }
   }
 }
-
-object RejectAllDynamicResourceHandler extends RejectAllDynamicResourceHandler
-
-object AllowAllDynamicResourceHandler extends AllowAllDynamicResourceHandler
 
 object GlossaryDynamicResourceHandler extends RejectAllDynamicResourceHandler {
 

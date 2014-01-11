@@ -5,7 +5,7 @@ import play.api.cache.Cache
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import security.{GlossaryUserSubject, SecurityUserService}
+import security.{SubjectNotPresentGlossaryUserDeadboltHandler, GlossaryUserDeadboltHandler, GlossaryUserSubject, SecurityUserService}
 import play.api.Logger
 
 object LoginController extends SecuredController {
@@ -23,32 +23,39 @@ object LoginController extends SecuredController {
     })
   )
 
-  def check(username: String, password: String) = {
+  private def check(username: String, password: String) = {
     val auth = SecurityUserService.authenticate(username, password)
 
     if (auth.isEmpty) false
     else {
-      //put auth in the session
-      Logger.debug(s"Put value $auth for $username")
+      val identifier = GlossaryUserSubject.generateIdentifier(username)
 
-      Cache.set(auth.get.getIdentifier, auth.get)
+      Logger.debug(s"Put value $identifier for $username")
+
+      //put auth in the session
+      Cache.set(identifier, auth.get)
 
       true
     }
   }
 
-  def login = Action { implicit request =>
-    Ok(views.html.login(loginForm))
+  def login = notAuthenticated {
+    Action { implicit request =>
+      Ok(views.html.login(loginForm))
+    }
   }
 
-  def authenticate = Action { implicit request =>
-    loginForm.bindFromRequest.fold(
-      formWithErrors =>
-        BadRequest(views.html.login(formWithErrors)),
 
-      form =>
-        HOME.withSession(Security.username -> GlossaryUserSubject.generateIdentifier(form._1))
-    )
+  def authenticate = notAuthenticated {
+    Action { implicit request =>
+      loginForm.bindFromRequest.fold(
+        formWithErrors =>
+          BadRequest(views.html.login(formWithErrors)),
+
+        form =>
+          HOME.withSession(Security.username -> GlossaryUserSubject.generateIdentifier(form._1))
+      )
+    }
   }
 
   def logout = Action {

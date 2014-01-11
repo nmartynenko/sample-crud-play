@@ -13,16 +13,36 @@ object GlossariesRestController extends SecuredController {
   implicit val gf = Json.format[Glossary]
   implicit val gpf = Json.format[GlossaryPageResponse]
 
-  def getGlossaries(startRow: Int, pageSize: Int) = Action {
-    val glossariesPage = GlossaryService.getCurrentPage(startRow, pageSize)
+  def getGlossaries(startRow: Int, pageSize: Int) = authenticated {
+    Action {
+      val glossariesPage = GlossaryService.getCurrentPage(startRow, pageSize)
 
-    Ok(Json.toJson(glossariesPage))
+      Ok(Json.toJson(glossariesPage))
+    }
   }
 
-  def getGlossary(id: Long) = Action {
-    val glossary = GlossaryService.getGlossaryById(id)
+  def getGlossary(id: Long) = authenticated {
+    Action {
+      val glossary = GlossaryService.getGlossaryById(id)
 
-    Ok(Json.toJson(glossary))
+      Ok(Json.toJson(glossary))
+    }
+  }
+
+  def removeGlossary(glossaryId: Long) =  asAdmin {
+    Action {
+      GlossaryService.removeGlossaryById(glossaryId)
+
+      Ok
+    }
+  }
+
+  def updateGlossary() = asAdmin {
+    saveUpdate {GlossaryService.updateGlossary}
+  }
+
+  def saveGlossary = asAdmin {
+    saveUpdate {GlossaryService.addGlossary}
   }
 
   private def saveUpdate(action: Glossary => Unit) = Action(parse.json) {
@@ -49,17 +69,6 @@ object GlossariesRestController extends SecuredController {
         //return tuple, which naturally transforms into map
         (key, value)
     }).toMap
-  }
-
-
-  def updateGlossary() = saveUpdate {GlossaryService.updateGlossary}
-
-  def saveGlossary = saveUpdate {GlossaryService.addGlossary}
-
-  def removeGlossary(glossaryId: Long) =  Action {
-    GlossaryService.removeGlossaryById(glossaryId)
-
-    Ok
   }
 
 }

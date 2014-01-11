@@ -1,16 +1,16 @@
 package security
 
 import be.objectify.deadbolt.core.models.{Role, Permission, Subject}
-import play.api.Play.{current => app}
 import java.util
 import models.User
 import org.apache.commons.codec.digest.DigestUtils
+import play.api.Play.{current => app}
 
-//Java2Scala conversions and vice versa
-import scala.collection.JavaConversions._
+class GlossaryUserSubject(val user: User) extends Subject with Serializable{
+  //Java2Scala conversions and vice versa
+  import scala.collection.JavaConversions._
 
-class GlossaryUserSubject(user: User) extends Subject with Serializable{
-  private val roles: util.List[_ <: Role] = GlossaryRoles(user.role)
+  private val roles: util.List[SimpleRole] = GlossaryRoles(user.role)
 
   private val identifier: String = GlossaryUserSubject.generateIdentifier(user.email)
 
@@ -18,7 +18,7 @@ class GlossaryUserSubject(user: User) extends Subject with Serializable{
 
   def getPermissions: util.List[_ <: Permission] = util.Collections.emptyList()
 
-  def getIdentifier: String = identifier
+  def getIdentifier: String = user.email
 
   override def toString: String = s"GlossaryUserSubject($identifier)"
 }

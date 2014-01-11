@@ -1,9 +1,14 @@
-@()(implicit lang: Lang)
+@(handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[Any])
+
+@import be.objectify.deadbolt.scala.views.html._
+@import be.objectify.deadbolt.core.utils.TemplateUtils._
+
 <body>
     <div id="header">
         <div>
             <span class="userGreeting">
-                @Messages("sample.message.welcome")&nbsp;TODO
+                @Messages("sample.message.welcome")&nbsp;
+                @handler.getSubject(request).get.getIdentifier
             </span>
             <a href="/logout">@Messages("sample.message.logout")</a>
         </div>
@@ -26,19 +31,19 @@
                     <th>@Messages("sample.message.id")</th>
                     <th>@Messages("sample.message.name")</th>
                     <th>@Messages("sample.message.description")</th>
-                    @*<security:authorize access="hasRole('ADMIN')">*@
+                    @restrict(handler, List(as("admin"))) {
                         <th>@Messages("sample.message.actions")</th>
-                    @*</security:authorize>*@
+                    }
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
 
-        @*<security:authorize access="hasRole('ADMIN')">*@
+        @restrict(handler, List(as("admin"))) {
             <div>
                 <input type="button" value="@Messages("sample.message.add")" class="edit" data-id="0">
             </div>
-        @*</security:authorize>*@
+        }
 
     </div>
 

@@ -9,40 +9,24 @@ import scala.concurrent.Future
 import play.api.cache.Cache
 import play.api.Logger
 
-object GlossaryUserDeadboltHandler extends DeadboltHandler {
+trait GlossaryUserDeadboltHandler extends DeadboltHandler {
 
-  private val loginPage = Redirect("/login.html")
+  protected val redirect: SimpleResult
 
-  private val handlerOption = Some(GlossaryDynamicResourceHandler)
-
-  def beforeAuthCheck[A](request: Request[A]): Option[Future[SimpleResult]] = {
-    def login = Some(Future.successful(loginPage))
-
-    //get username from session
-    request.session.get(Security.username) match {
-      //redirect to login page if there is no username
-      case None =>
-        login
-      case Some(username) =>
-        //validate username
-        Cache.get(username) match {
-          case None =>
-            login
-          case _ =>
-            None
-        }
-    }
-  }
+  protected val handlerOption = Some(GlossaryDynamicResourceHandler)
 
   def getSubject[A](request: Request[A]): Option[Subject] = {
-    //session should be present
-    val username = request.session(Security.username)
+    //get username from session
+    request.session.get(Security.username) match {
+      case None =>
+        None
+      case Some(username) =>
+        val fromCache = Cache.getAs[Subject](username)
 
-    val fromCache = Cache.getAs[Subject](username)
+        Logger.debug(s"Getting value for $username, and it returns $fromCache")
 
-    Logger.debug(s"Getting value for $username, and it returns $fromCache")
-
-    fromCache
+        fromCache
+    }
   }
 
   def onAuthFailure[A](request: Request[A]): Future[SimpleResult] = Future.successful {
@@ -52,4 +36,36 @@ object GlossaryUserDeadboltHandler extends DeadboltHandler {
   def getDynamicResourceHandler[A](request: Request[A]): Option[DynamicResourceHandler] = {
     handlerOption
   }
+}
+
+object SubjectPresentGlossaryUserDeadboltHandler extends GlossaryUserDeadboltHandler{
+
+  protected val redirect: SimpleResult = Redirect("/login.html")
+
+  def beforeAuthCheck[A](request: Request[A]): Option[Future[SimpleResult]] = {
+    getSubject(request) match {
+      case None =>
+        //redirect to login page if there is no subject
+        Some(Future.successful(redirect))
+      case _ =>
+        None
+    }
+  }
+
+}
+
+object SubjectNotPresentGlossaryUserDeadboltHandler extends GlossaryUserDeadboltHandler{
+
+  protected val redirect: SimpleResult = Redirect("/index.html")
+
+  def beforeAuthCheck[A](request: Request[A]): Option[Future[SimpleResult]] = {
+    getSubject(request) match {
+      case None =>
+        None
+      case _ =>
+        //redirect to home page if there is no subject
+        Some(Future.successful(redirect))
+    }
+  }
+
 }
