@@ -1,6 +1,7 @@
 package services.impl
 
 import domain.GlossaryPageResponse
+import exceptions.NoGlossaryFoundException
 import java.lang.Long
 import models.Glossary
 import persistence.GlossaryPersistence
@@ -24,7 +25,12 @@ class GlossaryServiceImpl extends GlossaryService with SlickTransactional {
 
   def getGlossaryById(glossaryId: Long): Glossary = readOnly {
     implicit session: Session =>
-      GlossaryPersistence.get(glossaryId)
+      GlossaryPersistence.get(glossaryId) match {
+        case Some(glossary) =>
+          glossary
+        case None =>
+          throw new NoGlossaryFoundException(modelId = glossaryId)
+      }
   }
 
   def addGlossary(glossary: Glossary): Unit = transactional {

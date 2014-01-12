@@ -10,7 +10,7 @@ import scala.slick.lifted
 
 trait Persistence[T <: AnyRef {val id : Option[Long]}] {
 
-  def get(id: Long)(implicit session: Session): T
+  def get(id: Long)(implicit session: Session): Option[T]
 
   def list()(implicit session: Session): Seq[T]
 
@@ -57,7 +57,7 @@ trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T]
 
   def autoInc = * returning id
 
-  def get(id: Long)(implicit session: Session): T = byId(id).first
+  def get(id: Long)(implicit session: Session): Option[T] = byId(id).firstOption
 
   def list()(implicit session: Session): Seq[T] = {
     list(-1, -1)
