@@ -9,4 +9,6 @@ abstract class BaseController extends Controller {
   @Autowired
   protected val objectMapper: ObjectMapper = null
 
+  protected val HOME = Redirect("/index.html")
+
 }

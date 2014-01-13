@@ -18,7 +18,6 @@
     <beans:bean name="glossaryUserDetailsService"
                 class="security.GlossaryUserDetailsService"/>
 
-    <!--<global-method-security secured-annotations="disabled" pre-post-annotations="disabled">-->
     <global-method-security secured-annotations="enabled" pre-post-annotations="enabled">
         <expression-handler ref="securityExpressionHandler"/>
     </global-method-security>

@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectReader
 import models.impl.Glossary
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.prepost.PreAuthorize
 import play.api.http.ContentTypes
 import play.api.mvc._
 import services.GlossaryService
 import vo.GlossaryList
 
 @MVCController
+@PreAuthorize("isAuthenticated()")
 class GlossariesRestController extends BaseController with InitializingBean {
 
   @Autowired

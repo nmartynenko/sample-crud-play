@@ -1,20 +1,31 @@
-import org.springframework.context._
 import org.springframework.context.support._
 import play.api._
 import play.api.mvc.Results._
-import play.api.mvc.SimpleResult
+import play.api.mvc.{Handler, RequestHeader, SimpleResult}
 import scala.concurrent.Future
 
-object SpringAwareGlobalSetting extends GlobalSettings with ControllerAdviceProcessor{
+object SpringAwareGlobalSetting extends GlobalSettings
+  with ControllerAdviceProcessor with SecurityInterceptor {
 
-  private var ctx: ConfigurableApplicationContext = null
+  private var ctx: AbstractXmlApplicationContext = null
 
   override def onStart(app: Application) {
     Logger.info("Initialize Spring context for Play application")
-    ctx = new ClassPathXmlApplicationContext("spring/*.xml")
+    //create basic context
+    val basiCtx = new ClassPathXmlApplicationContext("spring/*.xml")
 
     Logger.info("Initialization is complete")
 
+    //allow to proxy controllers with security annotations
+    ctx = new ClassPathXmlApplicationContext(basiCtx)
+
+    //set config locations
+    ctx.setConfigLocation("controllers/spring-security-controllers.xml")
+
+    //refresh context
+    ctx.refresh()
+
+    //init controller advices
     initControllerAdvice(ctx)
   }
 
@@ -24,6 +35,12 @@ object SpringAwareGlobalSetting extends GlobalSettings with ControllerAdviceProc
 
   override def onStop(app: Application): Unit = {
     ctx.close()
+  }
+
+  override def onRouteRequest(request: RequestHeader): Option[Handler] = {
+    setAuth(request)
+
+    super.onRouteRequest(request)
   }
 
   override def onHandlerNotFound(request: mvc.RequestHeader): Future[SimpleResult] = {

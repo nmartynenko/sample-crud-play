@@ -4,9 +4,12 @@ name := "sample-crud-play-spring-style"
 
 version := "1.0"
 
-resolvers += "Sonatype" at "http://search.maven.org/remotecontent?filepath="
-
-resolvers += "Spring milestones" at "https://repo.springsource.org/libs-milestone"
+resolvers ++= Seq(
+  "Sonatype" at "http://search.maven.org/remotecontent?filepath=",
+  "Spring milestones" at "https://repo.springsource.org/libs-milestone",
+  Resolver.url("Objectify Play Repository", url("http://schaloner.github.io/releases/"))(Resolver.ivyStylePatterns),
+  Resolver.url("Objectify Play Snapshot Repository", url("http://schaloner.github.io/snapshots/"))(Resolver.ivyStylePatterns)
+)
 
 libraryDependencies ++= Seq(
   //test dependencies
@@ -21,7 +24,6 @@ libraryDependencies ++= Seq(
   "org.springframework" % "spring-orm" % "4.0.0.RELEASE",
   "org.springframework" % "spring-webmvc" % "4.0.0.RELEASE",
   "org.springframework.security" % "spring-security-config" % "3.2.0.RELEASE",
-  "org.springframework.security" % "spring-security-taglibs" % "3.2.0.RELEASE",
   "org.springframework.data" % "spring-data-jpa" % "1.4.3.RELEASE",
   "org.springframework.scala" %% "spring-scala" % "1.0.0.RC1",
   //hibernate dependencies
@@ -31,8 +33,11 @@ libraryDependencies ++= Seq(
   "org.hsqldb" % "hsqldb" % "2.3.1",
   //jackson
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.3.0",
+  //security
+  "be.objectify" %% "deadbolt-scala" % "2.2-RC2",
   //enable JDBC module for the project
-  jdbc
+  jdbc,
+  cache
 )
 
 playScalaSettings
