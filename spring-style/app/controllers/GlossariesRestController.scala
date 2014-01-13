@@ -46,6 +46,7 @@ class GlossariesRestController extends BaseController with InitializingBean {
   }
 
   //treat input value as tolerant text
+  @PreAuthorize("hasAnyRole('ADMIN')")
   def saveGlossary() = Action(parse.tolerantText) {request =>
     val glossary = glossaryReader.readValue[Glossary](request.body)
 
@@ -55,6 +56,7 @@ class GlossariesRestController extends BaseController with InitializingBean {
   }
 
   //treat input value as tolerant text
+  @PreAuthorize("hasAnyRole('ADMIN')")
   def updateGlossary() = Action(parse.tolerantText) {request =>
     val glossary = glossaryReader.readValue[Glossary](request.body)
 
@@ -63,6 +65,7 @@ class GlossariesRestController extends BaseController with InitializingBean {
     Ok
   }
 
+  @PreAuthorize("hasAnyRole('ADMIN')")
   def removeGlossary(glossaryId: Long) = Action {
     glossaryService.removeGlossaryById(glossaryId)
 

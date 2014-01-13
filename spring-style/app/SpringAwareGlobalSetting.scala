@@ -1,7 +1,10 @@
+import org.springframework.beans.factory.BeanFactoryUtils
 import org.springframework.context.support._
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.AuthenticationException
 import play.api._
 import play.api.mvc.Results._
-import play.api.mvc.{Handler, RequestHeader, SimpleResult}
+import play.api.mvc.{Action, Handler, RequestHeader, SimpleResult}
 import scala.concurrent.Future
 
 object SpringAwareGlobalSetting extends GlobalSettings
@@ -30,7 +33,7 @@ object SpringAwareGlobalSetting extends GlobalSettings
   }
 
   override def getControllerInstance[A](controllerClass: Class[A]): A = {
-    ctx.getBean(controllerClass)
+    BeanFactoryUtils.beanOfTypeIncludingAncestors(ctx, controllerClass)
   }
 
   override def onStop(app: Application): Unit = {
@@ -40,7 +43,20 @@ object SpringAwareGlobalSetting extends GlobalSettings
   override def onRouteRequest(request: RequestHeader): Option[Handler] = {
     setAuth(request)
 
-    super.onRouteRequest(request)
+    try {
+      super.onRouteRequest(request)
+    }
+    catch {
+      //handle only security exceptions
+      case e: AuthenticationException =>
+        Some(Action {
+          Redirect("/login.html")
+        })
+      case e: AccessDeniedException =>
+        Some(Action {
+          Unauthorized(views.html.defaultpages.unauthorized())
+        })
+    }
   }
 
   override def onHandlerNotFound(request: mvc.RequestHeader): Future[SimpleResult] = {

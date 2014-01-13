@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.lang.{reflect => jreflect}
+import org.springframework.beans.factory.BeanFactoryUtils
 import org.springframework.context.ApplicationContext
 import org.springframework.web.bind.annotation.{ResponseBody, ResponseStatus}
 import org.springframework.web.method.ControllerAdviceBean
@@ -18,7 +19,7 @@ trait ControllerAdviceProcessor {
 
   private var resolvers: List[(ControllerAdviceBean, ExceptionHandlerMethodResolver)] = _
 
-  private var objectMapper: ObjectMapper = _
+  private var objectMapper: Option[ObjectMapper] = _
 
   def initControllerAdvice(ctx: ApplicationContext) {
     Logger.info("Try to find @ControllerAdvice")
@@ -32,16 +33,19 @@ trait ControllerAdviceProcessor {
       _._1.getOrder > _._1.getOrder
     }
 
-    Logger.info(s"Found $resolvers.size resolvers")
+    Logger.info(s"Found ${resolvers.size} resolvers")
 
     Logger.info("Try to find ObjectMapper for JSON converting")
 
     //find object mappers
-    val beansOfType = ctx.getBeansOfType(classOf[ObjectMapper])
+    val beansOfType = BeanFactoryUtils.beansOfTypeIncludingAncestors(ctx, classOf[ObjectMapper])
     //find first object mapper
-    objectMapper = if (beansOfType.isEmpty) null else beansOfType.values().iterator().next()
+    objectMapper = if (beansOfType.isEmpty) None else Some(beansOfType.values().iterator().next())
 
-    Logger.info("ObjectMapper is successfully found")
+    objectMapper match {
+      case Some(_) => Logger.info("ObjectMapper is successfully found")
+      case _ => Logger.info("ObjectMapper hasn't been found, Object support is skipped")
+    }
   }
 
   def handleError(request: mvc.RequestHeader, ex: Throwable): Option[Future[SimpleResult]] = {
@@ -127,11 +131,14 @@ trait ControllerAdviceProcessor {
             case res: SimpleResult =>
               //ignore status for SimpleResult
               res
-            case obj if objectMapper != null  =>
-              //try to convert return instance into Plain representation
-              status(objectMapper.writeValueAsString(obj)).as(ContentTypes.JSON)
-            case _ =>
-              throw new NotImplementedError(s"Could not return result for method $method.getDeclaredClass.getName#$method.getName")
+            case obj =>
+              objectMapper match {
+                case Some(om) =>
+                  //try to convert return instance into Plain representation
+                  status(om.writeValueAsString(obj)).as(ContentTypes.JSON)
+                case _ =>
+                  throw new NotImplementedError(s"Could not return result for method ${method.getDeclaringClass.getName}#${method.getName}")
+              }
           }
 
           //return Option of Future
