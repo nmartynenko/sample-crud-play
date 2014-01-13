@@ -3,6 +3,7 @@ package controllers
 import domain.GlossaryPageResponse
 import models.Glossary
 import play.api.data.validation.ValidationError
+import play.api.http.ContentTypes
 import play.api.i18n.{Lang, Messages}
 import play.api.libs.json._
 import play.api.mvc._
@@ -17,7 +18,7 @@ object GlossariesRestController extends SecuredController {
     Action {
       val glossariesPage = GlossaryService.getCurrentPage(startRow, pageSize)
 
-      Ok(Json.toJson(glossariesPage))
+      Ok(Json.toJson(glossariesPage)).as(ContentTypes.JSON)
     }
   }
 
@@ -25,7 +26,7 @@ object GlossariesRestController extends SecuredController {
     Action {
       GlossaryService.getGlossaryById(id) match {
         case Some(glossary) =>
-          Ok(Json.toJson(glossary))
+          Ok(Json.toJson(glossary)).as(ContentTypes.JSON)
         case _ =>
           BadRequest(Messages("sample.error.glossary.not.found", id))
       }

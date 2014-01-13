@@ -1,2 +1,2 @@
 #!/bin/sh
-sbt play run 8080
+sbt play "run 8080"

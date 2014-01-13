@@ -1,4 +1,4 @@
-* implement error handling in more easier manner (scala-style)
+* cover with tests
 
 * implement advanced validation
 

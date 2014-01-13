@@ -1,4 +1,4 @@
-@(handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[Any])
+@(lang: Lang, handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[_])
 
 @import be.objectify.deadbolt.scala.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
@@ -7,15 +7,15 @@
     <div id="header">
         <div>
             <span class="userGreeting">
-                @Messages("sample.message.welcome")&nbsp;
+                @Messages("sample.message.welcome")(lang)&nbsp;
                 @handler.getSubject(request).get.toString
             </span>
-            <a href="/logout">@Messages("sample.message.logout")</a>
+            <a href="/logout">@Messages("sample.message.logout")(lang)</a>
         </div>
         <div>
-            <span>@Messages("sample.message.change.locale")</span>
-            <a href="?lang=en">@Messages("sample.message.locale.en")</a>
-            <a href="?lang=ru">@Messages("sample.message.locale.ru")</a>
+            <span>@Messages("sample.message.change.locale")(lang)</span>
+            <a href="?lang=en">@Messages("sample.message.locale.en")(lang)</a>
+            <a href="?lang=ru">@Messages("sample.message.locale.ru")(lang)</a>
         </div>
     </div>
 
@@ -28,11 +28,11 @@
         <table id="jqTable">
             <thead>
                 <tr>
-                    <th>@Messages("sample.message.id")</th>
-                    <th>@Messages("sample.message.name")</th>
-                    <th>@Messages("sample.message.description")</th>
+                    <th>@Messages("sample.message.id")(lang)</th>
+                    <th>@Messages("sample.message.name")(lang)</th>
+                    <th>@Messages("sample.message.description")(lang)</th>
                     @restrict(handler, List(as("admin"))) {
-                        <th>@Messages("sample.message.actions")</th>
+                        <th>@Messages("sample.message.actions")(lang)</th>
                     }
                 </tr>
             </thead>
@@ -41,7 +41,7 @@
 
         @restrict(handler, List(as("admin"))) {
             <div>
-                <input type="button" value="@Messages("sample.message.add")" class="edit" data-id="0">
+                <input type="button" value="@Messages("sample.message.add")(lang)" class="edit" data-id="0">
             </div>
         }
 

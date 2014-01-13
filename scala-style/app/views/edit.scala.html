@@ -1,23 +1,23 @@
-@(handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[Any])
+@(lang: Lang, handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[_])
 @*Template for edit form*@
 <script type="text/x-handlebars-template" id="editGlossaryForm">
     <form>
         <input type="hidden" name="id" value="{{id}}">
         <div>
             <label for="name">
-            @Messages("sample.message.name")
+            @Messages("sample.message.name")(lang)
             </label>
             <input type="text" id="name" name="name" value="{{name}}" class="required">
         </div>
         <div>
             <label for="name">
-            @Messages("sample.message.description")
+            @Messages("sample.message.description")(lang)
             </label>
             <input type="text" id="description" name="description" value="{{description}}" class="required">
         </div>
 
         <div>
-            <input type="submit" value="@Messages("sample.message.save")">
+            <input type="submit" value="@Messages("sample.message.save")(lang)">
         </div>
     </form>
 </script>
