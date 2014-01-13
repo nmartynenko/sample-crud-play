@@ -23,14 +23,9 @@ class GlossaryServiceImpl extends GlossaryService with SlickTransactional {
   }
 
 
-  def getGlossaryById(glossaryId: Long): Glossary = readOnly {
+  def getGlossaryById(glossaryId: Long): Option[Glossary] = readOnly {
     implicit session: Session =>
-      GlossaryPersistence.get(glossaryId) match {
-        case Some(glossary) =>
-          glossary
-        case None =>
-          throw new NoGlossaryFoundException(modelId = glossaryId)
-      }
+      GlossaryPersistence.get(glossaryId)
   }
 
   def addGlossary(glossary: Glossary): Unit = transactional {

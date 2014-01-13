@@ -9,7 +9,7 @@ trait GlossaryService {
 
   def getCurrentPage(startRow: Int, pageSize: Int): GlossaryPageResponse
 
-  def getGlossaryById(glossaryId: Long): Glossary
+  def getGlossaryById(glossaryId: Long): Option[Glossary]
 
   def addGlossary(glossary: Glossary): Unit
 

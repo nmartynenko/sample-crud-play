@@ -23,9 +23,12 @@ object GlossariesRestController extends SecuredController {
 
   def getGlossary(id: Long) = authenticated {
     Action {
-      val glossary = GlossaryService.getGlossaryById(id)
-
-      Ok(Json.toJson(glossary))
+      GlossaryService.getGlossaryById(id) match {
+        case Some(glossary) =>
+          Ok(Json.toJson(glossary))
+        case _ =>
+          BadRequest(Messages("sample.error.glossary.not.found", id))
+      }
     }
   }
 

@@ -11,6 +11,12 @@ trait ErrorHandler[T <: Throwable] {
   def handleError(ex: T, request: RequestHeader): Option[SimpleResult]
 }
 
+/**
+ * More advanced error handler processor
+ * might be useful, if exception handlers are scanned on application startup
+ *
+ * Note: currently it's not used in favor of simple pattern matching
+ */
 class SimpleErrorHandler extends ErrorHandler[Exception]{
   def handleError(ex: Exception, request: RequestHeader): Option[SimpleResult] = {
     Logger.error(ex.getMessage, ex)

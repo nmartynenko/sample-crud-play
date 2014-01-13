@@ -24,10 +24,14 @@ object Global extends GlobalSettings with ErrorHandlerProcessor{
   }
 
   override def onError(request: RequestHeader, ex: Throwable): Future[SimpleResult] = {
-    //onError original exceptions are always wrapped with Play ones
-    val handler = handleError(ex.getCause, request)
+    import mapper.ErrorResponses._
 
-    handler.getOrElse(super.onError(request, ex))
+    //onError original exceptions are always wrapped with Play ones
+    ex.getCause match {
+      case e: Exception => handleException(e, request)
+      case _ =>
+        super.onError(request, ex)
+    }
   }
 
 }
