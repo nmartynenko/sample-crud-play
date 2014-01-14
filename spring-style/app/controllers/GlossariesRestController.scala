@@ -47,23 +47,22 @@ class GlossariesRestController extends BaseController with InitializingBean {
 
   //treat input value as tolerant text
   @PreAuthorize("hasAnyRole('ADMIN')")
-  def saveGlossary() = Action(parse.tolerantText) {request =>
-    val glossary = glossaryReader.readValue[Glossary](request.body)
+  def saveGlossary() = saveUpdate {glossaryService.updateGlossary}
 
-    glossaryService.addGlossary(glossary)
-
-    Ok
-  }
+  @PreAuthorize("hasAnyRole('ADMIN')")
+  def updateGlossary() = saveUpdate {glossaryService.updateGlossary}
 
   //treat input value as tolerant text
-  @PreAuthorize("hasAnyRole('ADMIN')")
-  def updateGlossary() = Action(parse.tolerantText) {request =>
-    val glossary = glossaryReader.readValue[Glossary](request.body)
+  private def saveUpdate(action: Glossary => Unit) = Action(parse.tolerantText) {
+    implicit request =>
+      val glossary = glossaryReader.readValue[Glossary](request.body)
 
-    glossaryService.updateGlossary(glossary)
+      //todo validate
+      action(glossary)
 
-    Ok
+      Ok
   }
+
 
   @PreAuthorize("hasAnyRole('ADMIN')")
   def removeGlossary(glossaryId: Long) = Action {

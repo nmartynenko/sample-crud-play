@@ -28,9 +28,9 @@ trait ControllerAdviceProcessor {
 
     resolvers = advices map {advice =>
       (advice, new ExceptionHandlerMethodResolver(advice.getBeanType))
-    } sortWith {
-      //sort it by "order" descending
-      _._1.getOrder > _._1.getOrder
+    } sortBy  {
+      //sort it by "order" ascending
+      _._1.getOrder
     }
 
     Logger.info(s"Found ${resolvers.size} resolvers")
@@ -131,6 +131,7 @@ trait ControllerAdviceProcessor {
             case res: SimpleResult =>
               //ignore status for SimpleResult
               res
+            //otherwise
             case obj =>
               objectMapper match {
                 case Some(om) =>

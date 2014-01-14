@@ -4,7 +4,6 @@ import exceptions.GlossaryException
 import java.lang.Long
 import models.impl.Glossary
 import org.springframework.data.domain.Page
-import org.springframework.security.access.prepost.PreAuthorize
 import scala.throws
 
 trait GlossaryService {
@@ -16,19 +15,15 @@ trait GlossaryService {
   def getGlossaryById(glossaryId: Long): Glossary
 
   @throws[GlossaryException]
-  @PreAuthorize("hasRole('ADMIN')")
   def addGlossary(glossary: Glossary): Unit
 
   @throws[GlossaryException]
-  @PreAuthorize("hasRole('ADMIN')")
   def updateGlossary(glossary: Glossary): Unit
 
   @throws[GlossaryException]
-  @PreAuthorize("hasRole('ADMIN')")
   def removeGlossary(glossary: Glossary): Unit
 
   @throws[GlossaryException]
-  @PreAuthorize("hasRole('ADMIN')")
   def removeGlossaryById(glossaryId: Long): Unit
 
 }
