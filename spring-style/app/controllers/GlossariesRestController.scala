@@ -1,5 +1,6 @@
 package controllers
 
+import com.aimprosoft.scala.contrib.oval.ScalaOvalValidator
 import com.fasterxml.jackson.databind.ObjectReader
 import models.impl.Glossary
 import org.springframework.beans.factory.InitializingBean
@@ -9,10 +10,17 @@ import play.api.http.ContentTypes
 import play.api.mvc._
 import services.GlossaryService
 import vo.GlossaryList
+import play.api.libs.json.Json
+import net.sf.oval.ConstraintViolation
+import play.api.i18n.Messages
+import net.sf.oval.context.FieldContext
 
 @MVCController
 @PreAuthorize("isAuthenticated()")
 class GlossariesRestController extends BaseController with InitializingBean {
+
+  @Autowired
+  private val validator: ScalaOvalValidator = null
 
   @Autowired
   private val glossaryService: GlossaryService = null
@@ -45,6 +53,13 @@ class GlossariesRestController extends BaseController with InitializingBean {
     Ok(json).as(ContentTypes.JSON)
   }
 
+  @PreAuthorize("hasAnyRole('ADMIN')")
+  def removeGlossary(glossaryId: Long) = Action {
+    glossaryService.removeGlossaryById(glossaryId)
+
+    Ok
+  }
+
   //treat input value as tolerant text
   @PreAuthorize("hasAnyRole('ADMIN')")
   def saveGlossary() = saveUpdate {glossaryService.updateGlossary}
@@ -57,18 +72,28 @@ class GlossariesRestController extends BaseController with InitializingBean {
     implicit request =>
       val glossary = glossaryReader.readValue[Glossary](request.body)
 
-      //todo validate
-      action(glossary)
+      validator.validate(glossary) match {
+        case Nil =>
+          action(glossary)
+          Ok
+        case constraints =>
+          val validationResponse = handleErrors(constraints)
 
-      Ok
+          BadRequest(Json.toJson(validationResponse))
+      }
   }
 
+  private def handleErrors(constraints: List[ConstraintViolation]): Map[String, String] = {
+    (constraints map { constraint =>
+      val key = constraint.getContext match {
+        case fc: FieldContext => fc.getField.getName
+        case _ => constraint.getErrorCode
+      }
+      val value =  Messages(constraint.getMessage)
 
-  @PreAuthorize("hasAnyRole('ADMIN')")
-  def removeGlossary(glossaryId: Long) = Action {
-    glossaryService.removeGlossaryById(glossaryId)
-
-    Ok
+      (key, value)
+    }).toMap
   }
+
 
 }

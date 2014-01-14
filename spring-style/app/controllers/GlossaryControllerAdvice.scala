@@ -1,9 +1,8 @@
 package controllers
 
+import com.fasterxml.jackson.core.JsonProcessingException
 import exceptions.{GlossaryException, NoGlossaryFoundException}
 import org.springframework.http.HttpStatus
-import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.annotation.{ResponseStatus, ExceptionHandler, ResponseBody, ControllerAdvice}
 import play.api.Logger
 import play.api.i18n.Messages
@@ -26,18 +25,11 @@ class GlossaryControllerAdvice extends BaseController {
     simpleExceptionHandler(e)
   }
 
-  @ResponseStatus(HttpStatus.FORBIDDEN)
-  @ExceptionHandler(value = Array(classOf[AccessDeniedException]))
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(value = Array(classOf[JsonProcessingException]))
   @ResponseBody
-  def handleAccessDeniedException(e: AccessDeniedException) {
-    simpleExceptionHandler(e)
-  }
-
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  @ExceptionHandler(value = Array(classOf[AuthenticationException]))
-  @ResponseBody
-  def handleAuthenticationException(e: AuthenticationException) = {
-    simpleExceptionHandler(e)
+  def handleAuthenticationException(e: JsonProcessingException) = {
+    e.getMessage
   }
 
   //logs exception and returns it's message

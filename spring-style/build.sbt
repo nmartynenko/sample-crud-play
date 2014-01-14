@@ -6,9 +6,7 @@ version := "1.0"
 
 resolvers ++= Seq(
   "Sonatype" at "http://search.maven.org/remotecontent?filepath=",
-  "Spring milestones" at "https://repo.springsource.org/libs-milestone",
-  Resolver.url("Objectify Play Repository", url("http://schaloner.github.io/releases/"))(Resolver.ivyStylePatterns),
-  Resolver.url("Objectify Play Snapshot Repository", url("http://schaloner.github.io/snapshots/"))(Resolver.ivyStylePatterns)
+  "Spring milestones" at "https://repo.springsource.org/libs-milestone"
 )
 
 libraryDependencies ++= Seq(
@@ -33,8 +31,8 @@ libraryDependencies ++= Seq(
   "org.hsqldb" % "hsqldb" % "2.3.1",
   //jackson
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.3.0",
-  //security
-  "be.objectify" %% "deadbolt-scala" % "2.2-RC2",
+  //validation
+  "net.sf.oval" % "oval" % "1.84",
   //enable JDBC module for the project
   jdbc,
   cache

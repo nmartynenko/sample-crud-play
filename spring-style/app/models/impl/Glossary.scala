@@ -3,17 +3,24 @@ package models.impl
 import javax.persistence._
 import models.BusinessModel
 import scala.beans.BeanProperty
+import net.sf.oval.constraint.{NotEmpty, NotNull}
 
 @Entity
 @Table(name = "glossary")
 class Glossary extends BusinessModel {
 
   @BeanProperty
+  //validation
+  @NotNull(message = "sample.error.not.null")
+  @NotEmpty(message = "sample.error.not.empty")
   //hibernate
   @Column(name = "name", nullable = false, unique = true)
   var name: String = _
 
   @BeanProperty
+  //validation
+  @NotNull(message = "sample.error.not.null")
+  @NotEmpty(message = "sample.error.not.empty")
   //hibernate
   @Lob
   @Column(name = "description", nullable = true, length = 4096)
