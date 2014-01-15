@@ -1,8 +1,13 @@
-import mapper.ErrorHandlerProcessor
+package com.aimprosoft.play.glossaries
+
+import _root_.listeners.{CreateGlossaryDataListener, CreateUserListener, CreateAdminListener, ApplicationDDLCreator}
+import _root_.mapper.ErrorHandlerProcessor
+import _root_.mapper.ErrorResponses._
+import listeners._
 import play.api.mvc.Results._
+import play.api.mvc.SimpleResult
 import play.api.mvc._
 import play.api.{Logger, Application, GlobalSettings}
-import listeners._
 import scala.concurrent.Future
 
 object Global extends GlobalSettings with ErrorHandlerProcessor{
@@ -24,7 +29,6 @@ object Global extends GlobalSettings with ErrorHandlerProcessor{
   }
 
   override def onError(request: RequestHeader, ex: Throwable): Future[SimpleResult] = {
-    import mapper.ErrorResponses._
 
     //onError original exceptions are always wrapped with Play ones
     ex.getCause match {
