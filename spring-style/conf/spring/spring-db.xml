@@ -13,7 +13,7 @@
        http://www.springframework.org/schema/util
        http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean name="dataSource" class="factory.DataSourceFactoryBean"/>
+    <bean name="dataSource" class="com.aimprosoft.play.glossaries.factory.DataSourceFactoryBean"/>
 
     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           id="entityManagerFactory">
@@ -28,7 +28,7 @@
         </property>
         <property name="packagesToScan">
             <array>
-                <value>models</value>
+                <value>com.aimprosoft.play.glossaries.models</value>
             </array>
         </property>
 
@@ -44,7 +44,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <jpa:repositories base-package="persistence"
+    <jpa:repositories base-package="com.aimprosoft.play.glossaries.persistence"
                       entity-manager-factory-ref="entityManagerFactory"
                       transaction-manager-ref="transactionManager"
                       repository-impl-postfix="CustomImpl"/>

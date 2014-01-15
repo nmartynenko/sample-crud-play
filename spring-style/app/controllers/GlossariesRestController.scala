@@ -1,19 +1,19 @@
 package controllers
 
+import com.aimprosoft.play.glossaries.models.impl.Glossary
+import com.aimprosoft.play.glossaries.services.GlossaryService
+import com.aimprosoft.play.glossaries.vo.GlossaryList
 import com.aimprosoft.scala.contrib.oval.ScalaOvalValidator
 import com.fasterxml.jackson.databind.ObjectReader
-import models.impl.Glossary
+import net.sf.oval.ConstraintViolation
+import net.sf.oval.context.FieldContext
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
 import play.api.http.ContentTypes
-import play.api.mvc._
-import services.GlossaryService
-import vo.GlossaryList
-import play.api.libs.json.Json
-import net.sf.oval.ConstraintViolation
 import play.api.i18n.Messages
-import net.sf.oval.context.FieldContext
+import play.api.libs.json.Json
+import play.api.mvc._
 
 @MVCController
 @PreAuthorize("isAuthenticated()")

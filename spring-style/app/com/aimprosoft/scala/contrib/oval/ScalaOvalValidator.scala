@@ -3,6 +3,7 @@ package com.aimprosoft.scala.contrib.oval
 import java.util
 import net.sf.oval.{ConstraintViolation, Validator}
 import scala.beans.BeanProperty
+import scala.language.reflectiveCalls
 
 //Java2Scala conversions and vice versa
 import scala.collection.JavaConversions._

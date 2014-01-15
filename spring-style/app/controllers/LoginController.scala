@@ -1,13 +1,13 @@
 package controllers
 
+import com.aimprosoft.play.glossaries.security.GlossaryAuthenticationService
+import org.springframework.beans.factory.annotation.Autowired
+import play.api.Logger
 import play.api.Play.current
 import play.api.cache.Cache
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import play.api.Logger
-import security.GlossaryAuthenticationService
-import org.springframework.beans.factory.annotation.Autowired
 
 @MVCController
 class LoginController extends BaseController{

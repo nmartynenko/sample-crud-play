@@ -4,6 +4,12 @@ name := "sample-crud-play-spring-style"
 
 version := "1.0"
 
+scalaVersion += "2.10.2"
+
+scalacOptions ++= Seq(
+  "-feature"
+)
+
 resolvers ++= Seq(
   "Sonatype" at "http://search.maven.org/remotecontent?filepath=",
   "Spring milestones" at "https://repo.springsource.org/libs-milestone"

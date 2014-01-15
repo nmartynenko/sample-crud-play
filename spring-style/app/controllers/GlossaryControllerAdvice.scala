@@ -1,7 +1,7 @@
 package controllers
 
+import com.aimprosoft.play.glossaries.exceptions.{GlossaryException, NoGlossaryFoundException}
 import com.fasterxml.jackson.core.JsonProcessingException
-import exceptions.{GlossaryException, NoGlossaryFoundException}
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.{ResponseStatus, ExceptionHandler, ResponseBody, ControllerAdvice}
 import play.api.Logger
