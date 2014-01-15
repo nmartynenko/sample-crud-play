@@ -1,8 +1,8 @@
-package security
+package com.aimprosoft.play.glossaries.security
 
 import be.objectify.deadbolt.core.models.{Role, Permission, Subject}
+import com.aimprosoft.play.glossaries.models.User
 import java.util
-import models.User
 import org.apache.commons.codec.digest.DigestUtils
 import play.api.Play.{current => app}
 

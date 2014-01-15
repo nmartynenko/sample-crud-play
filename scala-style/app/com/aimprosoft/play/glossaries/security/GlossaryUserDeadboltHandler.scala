@@ -1,13 +1,13 @@
-package security
+package com.aimprosoft.play.glossaries.security
 
 import be.objectify.deadbolt.core.models.Subject
 import be.objectify.deadbolt.scala.{DynamicResourceHandler, DeadboltHandler}
-import play.api.mvc.Results._
+import play.api.Logger
 import play.api.Play.current
+import play.api.cache.Cache
+import play.api.mvc.Results._
 import play.api.mvc.{Security, SimpleResult, Request}
 import scala.concurrent.Future
-import play.api.cache.Cache
-import play.api.Logger
 
 trait GlossaryUserDeadboltHandler extends DeadboltHandler {
 

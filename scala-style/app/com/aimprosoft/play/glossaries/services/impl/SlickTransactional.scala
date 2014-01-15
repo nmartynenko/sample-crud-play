@@ -1,4 +1,4 @@
-package services.impl
+package com.aimprosoft.play.glossaries.services.impl
 
 import play.api.Play.current
 import play.api.db.slick.{DB, Session}

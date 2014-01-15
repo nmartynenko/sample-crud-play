@@ -1,10 +1,10 @@
-package services.impl
+package com.aimprosoft.play.glossaries.services.impl
 
-import models.User
-import persistence.UserPersistence
-import play.api.db.slick.Session
-import services.UserService
+import com.aimprosoft.play.glossaries.models.User
+import com.aimprosoft.play.glossaries.persistence.UserPersistence
+import com.aimprosoft.play.glossaries.services.UserService
 import org.mindrot.jbcrypt.BCrypt
+import play.api.db.slick.Session
 
 class UserServiceImpl extends UserService with SlickTransactional {
 

@@ -1,11 +1,11 @@
-package mapper
+package com.aimprosoft.play.glossaries.mapper
 
-import exceptions.{GlossaryException, NoGlossaryFoundException}
+import com.aimprosoft.play.glossaries.exceptions.{GlossaryException, NoGlossaryFoundException}
+import play.api.Logger
 import play.api.i18n.Messages
 import play.api.mvc.Results._
 import play.api.mvc._
 import scala.concurrent.Future
-import play.api.Logger
 
 trait ErrorHandler[T <: Throwable] {
   def handleError(ex: T, request: RequestHeader): Option[SimpleResult]

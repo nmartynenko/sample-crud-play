@@ -1,4 +1,4 @@
-package mapper
+package com.aimprosoft.play.glossaries.mapper
 
 import play.api.Logger
 import play.api.mvc.Results._

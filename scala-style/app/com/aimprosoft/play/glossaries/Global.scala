@@ -1,16 +1,13 @@
 package com.aimprosoft.play.glossaries
 
-import _root_.listeners.{CreateGlossaryDataListener, CreateUserListener, CreateAdminListener, ApplicationDDLCreator}
-import _root_.mapper.ErrorHandlerProcessor
-import _root_.mapper.ErrorResponses._
-import listeners._
+import com.aimprosoft.play.glossaries.listeners._
+import com.aimprosoft.play.glossaries.mapper.ErrorResponses._
 import play.api.mvc.Results._
-import play.api.mvc.SimpleResult
 import play.api.mvc._
 import play.api.{Logger, Application, GlobalSettings}
 import scala.concurrent.Future
 
-object Global extends GlobalSettings with ErrorHandlerProcessor{
+object Global extends GlobalSettings{
 
   override def onStart(app: Application): Unit = {
     Logger.info("Pre-fill some data")

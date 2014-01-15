@@ -1,4 +1,4 @@
-package security
+package com.aimprosoft.play.glossaries.security
 
 import be.objectify.deadbolt.core.models.Role
 

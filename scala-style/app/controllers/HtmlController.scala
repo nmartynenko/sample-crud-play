@@ -1,8 +1,8 @@
 package controllers
 
+import com.aimprosoft.play.glossaries.security.SubjectPresentGlossaryUserDeadboltHandler
 import play.api.i18n.Lang
 import play.api.mvc._
-import security.SubjectPresentGlossaryUserDeadboltHandler
 
 object HtmlController extends SecuredController {
 

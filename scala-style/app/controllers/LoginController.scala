@@ -1,12 +1,12 @@
 package controllers
 
+import com.aimprosoft.play.glossaries.security.{GlossaryUserSubject, SecurityUserService}
+import play.api.Logger
 import play.api.Play.current
 import play.api.cache.Cache
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
-import security.{SubjectNotPresentGlossaryUserDeadboltHandler, GlossaryUserDeadboltHandler, GlossaryUserSubject, SecurityUserService}
-import play.api.Logger
 
 object LoginController extends SecuredController {
 

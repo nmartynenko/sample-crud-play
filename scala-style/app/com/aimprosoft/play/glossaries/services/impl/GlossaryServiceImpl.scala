@@ -1,12 +1,10 @@
-package services.impl
+package com.aimprosoft.play.glossaries.services.impl
 
-import domain.GlossaryPageResponse
-import exceptions.NoGlossaryFoundException
-import java.lang.Long
-import models.Glossary
-import persistence.GlossaryPersistence
+import com.aimprosoft.play.glossaries.domain.GlossaryPageResponse
+import com.aimprosoft.play.glossaries.models.Glossary
+import com.aimprosoft.play.glossaries.persistence.GlossaryPersistence
+import com.aimprosoft.play.glossaries.services.GlossaryService
 import play.api.db.slick.Session
-import services.GlossaryService
 
 class GlossaryServiceImpl extends GlossaryService with SlickTransactional {
 

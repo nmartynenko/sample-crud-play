@@ -1,4 +1,4 @@
-package security
+package com.aimprosoft.play.glossaries.security
 
 import be.objectify.deadbolt.scala.{DeadboltHandler, DynamicResourceHandler}
 import play.api.mvc.Request
@@ -22,6 +22,7 @@ object AllowAllDynamicResourceHandler extends AllowAllDynamicResourceHandler
 object RoleBasedDynamicResourceHandler extends RejectAllDynamicResourceHandler {
 
   //Java2Scala conversions and vice versa
+
   import scala.collection.JavaConversions._
 
   override def isAllowed[A](name: String, meta: String, deadboltHandler: DeadboltHandler, request: Request[A]): Boolean = {

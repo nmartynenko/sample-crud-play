@@ -1,9 +1,9 @@
-package listeners
+package com.aimprosoft.play.glossaries.listeners
 
-import models.Glossary
-import scala.util.Random
-import services.GlossaryService
+import com.aimprosoft.play.glossaries.models.Glossary
+import com.aimprosoft.play.glossaries.services.GlossaryService
 import play.api.Logger
+import scala.util.Random
 
 object CreateGlossaryDataListener extends Listener {
   

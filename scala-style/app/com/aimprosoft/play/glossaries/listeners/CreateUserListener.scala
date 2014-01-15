@@ -1,8 +1,8 @@
-package listeners
+package com.aimprosoft.play.glossaries.listeners
 
+import com.aimprosoft.play.glossaries.models.User
+import com.aimprosoft.play.glossaries.services.UserService
 import play.api.Logger
-import services.UserService
-import models.User
 
 object CreateUserListener extends Listener {
 

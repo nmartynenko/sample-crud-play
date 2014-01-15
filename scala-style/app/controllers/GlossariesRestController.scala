@@ -1,13 +1,13 @@
 package controllers
 
-import domain.GlossaryPageResponse
-import models.Glossary
+import com.aimprosoft.play.glossaries.domain.GlossaryPageResponse
+import com.aimprosoft.play.glossaries.models.Glossary
+import com.aimprosoft.play.glossaries.services.GlossaryService
 import play.api.data.validation.ValidationError
 import play.api.http.ContentTypes
 import play.api.i18n.{Lang, Messages}
 import play.api.libs.json._
 import play.api.mvc._
-import services.GlossaryService
 
 object GlossariesRestController extends SecuredController {
 

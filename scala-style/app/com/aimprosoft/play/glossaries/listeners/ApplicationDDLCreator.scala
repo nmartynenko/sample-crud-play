@@ -1,11 +1,11 @@
-package listeners
+package com.aimprosoft.play.glossaries.listeners
 
-import persistence.{GlossaryPersistence, UserPersistence}
+import com.aimprosoft.play.glossaries.persistence.{GlossaryPersistence, UserPersistence}
+import play.api.Logger
 import play.api.Play.current
 import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.DB
 import scala.slick.jdbc.meta.MTable
-import play.api.Logger
 
 object ApplicationDDLCreator extends Listener{
   def init(): Unit = {

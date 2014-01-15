@@ -1,11 +1,11 @@
-package persistence
+package com.aimprosoft.play.glossaries.persistence
 
+import com.aimprosoft.play.glossaries.exceptions.{NoUserFoundException, NoGlossaryFoundException}
+import com.aimprosoft.play.glossaries.models._
 import play.api.Play.current
 import play.api.db.slick.Config.driver.simple._
 import play.api.db.slick.DB
-import models._
 import scala.slick.driver.ExtendedDriver
-import exceptions.{NoUserFoundException, NoGlossaryFoundException}
 import scala.slick.lifted
 
 trait Persistence[T <: AnyRef {val id : Option[Long]}] {

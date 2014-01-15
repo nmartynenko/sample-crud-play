@@ -1,9 +1,8 @@
-package services
+package com.aimprosoft.play.glossaries.services
 
-import java.lang.Long
-import services.impl.GlossaryServiceImpl
-import models.Glossary
-import domain.GlossaryPageResponse
+import com.aimprosoft.play.glossaries.domain.GlossaryPageResponse
+import com.aimprosoft.play.glossaries.models.Glossary
+import com.aimprosoft.play.glossaries.services.impl.GlossaryServiceImpl
 
 trait GlossaryService {
 
