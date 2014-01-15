@@ -7,16 +7,10 @@ import play.api.mvc.Results._
 import play.api.mvc._
 import scala.concurrent.Future
 
-trait ErrorHandler[T <: Throwable] {
+trait ErrorHandler[+T <: Throwable] {
   def handleError(ex: T, request: RequestHeader): Option[SimpleResult]
 }
 
-/**
- * More advanced error handler processor
- * might be useful, if exception handlers are scanned on application startup
- *
- * Note: currently it's not used in favor of simple pattern matching
- */
 class SimpleErrorHandler extends ErrorHandler[Exception]{
   def handleError(ex: Exception, request: RequestHeader): Option[SimpleResult] = {
     Logger.error(ex.getMessage, ex)
@@ -31,6 +25,12 @@ class NoGlossaryFoundErrorHandler extends ErrorHandler[NoGlossaryFoundException]
   }
 }
 
+/**
+ * More advanced error handler processor
+ * might be useful, if exception handlers are scanned on application startup
+ *
+ * Note: currently it's not used in favor of simple pattern matching
+ */
 trait ErrorHandlerProcessor {
 
   val exactMatch: Boolean = false
@@ -41,7 +41,7 @@ trait ErrorHandlerProcessor {
   )
 
   def handleError[T <: Throwable](ex: T, request: RequestHeader): Option[Future[SimpleResult]] = {
-    def findMatch(matchClass: Class[_ <: Throwable]): Option[ErrorHandler[_ <: Throwable]] = {
+    def findMatch(matchClass: Class[_ <: Throwable]): Option[ErrorHandler[Throwable]] = {
       exceptionHandlers.get(matchClass) match {
         case ret @ Some(_) =>
           ret
@@ -62,8 +62,7 @@ trait ErrorHandlerProcessor {
 
     handlerOption match {
       case Some(handler) =>
-        //note: double check what is wrong with this generic type
-        handler.asInstanceOf[ErrorHandler[Throwable]].handleError(ex, request) match {
+        handler.handleError(ex, request) match {
           case Some(result) =>
             Some(Future.successful(result))
           case _ =>
