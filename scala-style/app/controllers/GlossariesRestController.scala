@@ -64,11 +64,13 @@ object GlossariesRestController extends SecuredController {
 
   //use dot method call just as Martin Odersky recommends
   //https://twitter.com/odersky/status/49882758968905728
-  private def handleErrors(errors: Seq[(JsPath, Seq[ValidationError])])(implicit lang: Lang): Map[String, Array[String]] = {
+  private def handleErrors(errors: Seq[(JsPath, Seq[ValidationError])])(implicit lang: Lang): Map[String, Seq[String]] = {
     (errors map {
       case (jsPath, validationErrors) =>
         val key = jsPath.toString()
-        val value = validationErrors.map(valError => Messages(valError.message)).toArray
+        val value = validationErrors map {
+          valError => Messages(valError.message)
+        }
 
         //return tuple, which naturally transforms into map
         (key, value)

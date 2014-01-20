@@ -95,5 +95,4 @@ class GlossariesRestController extends BaseController with InitializingBean {
     }).toMap
   }
 
-
 }

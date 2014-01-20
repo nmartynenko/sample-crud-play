@@ -116,7 +116,7 @@ class SlickGlossaries extends Table[Glossary]("glossary")
 
   def name = column[String]("name", O.NotNull)
 
-  def description = column[String]("description")
+  def description = column[String]("description", O.Nullable)
 
   def * = id.? ~ name ~ description.? <> (Glossary.apply _, Glossary.unapply _)
 }
@@ -129,7 +129,7 @@ class SlickUsers extends Table[User]("glossary_user")
 
   def email = column[String]("email", O.NotNull)
 
-  def password = column[String]("password")
+  def password = column[String]("password", O.Nullable)
 
   def name = column[String]("name", O.NotNull)
 

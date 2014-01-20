@@ -7,7 +7,7 @@ import play.api.mvc.Results._
 import play.api.mvc._
 import scala.concurrent.Future
 
-trait ErrorHandler[+T <: Throwable] {
+trait ErrorHandler[-T <: Throwable] {
   def handleError(ex: T, request: RequestHeader): Option[SimpleResult]
 }
 
@@ -31,7 +31,7 @@ class NoGlossaryFoundErrorHandler extends ErrorHandler[NoGlossaryFoundException]
  *
  * Note: currently it's not used in favor of simple pattern matching
  */
-trait ErrorHandlerProcessor {
+object ErrorHandlerProcessor {
 
   val exactMatch: Boolean = false
 
@@ -40,8 +40,8 @@ trait ErrorHandlerProcessor {
     classOf[Exception] -> new SimpleErrorHandler
   )
 
-  def handleError[T <: Throwable](ex: T, request: RequestHeader): Option[Future[SimpleResult]] = {
-    def findMatch(matchClass: Class[_ <: Throwable]): Option[ErrorHandler[Throwable]] = {
+  def handleError(ex: Throwable, request: RequestHeader): Option[Future[SimpleResult]] = {
+    def findMatch(matchClass: Class[_ <: Throwable]): Option[ErrorHandler[_ <: Throwable]] = {
       exceptionHandlers.get(matchClass) match {
         case ret @ Some(_) =>
           ret
@@ -61,7 +61,7 @@ trait ErrorHandlerProcessor {
     val handlerOption = findMatch(ex.getClass)
 
     handlerOption match {
-      case Some(handler) =>
+      case Some(handler: ErrorHandler[Throwable]) =>
         handler.handleError(ex, request) match {
           case Some(result) =>
             Some(Future.successful(result))

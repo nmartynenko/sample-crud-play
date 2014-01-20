@@ -2,7 +2,7 @@ import play.Project._
 
 name := "sample-crud-play-scala-style"
 
-version := "1.0"
+version := "1.1"
 
 resolvers += "Sonatype" at "http://search.maven.org/remotecontent?filepath="
 
