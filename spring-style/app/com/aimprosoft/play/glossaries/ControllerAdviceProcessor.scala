@@ -30,9 +30,10 @@ trait ControllerAdviceProcessor {
 
     resolvers = advices map {advice =>
       (advice, new ExceptionHandlerMethodResolver(advice.getBeanType))
-    } sortBy  {
-      //sort it by "order" ascending
-      _._1.getOrder
+    } sortBy {
+      case(advice, _) =>
+        //sort it by "order" ascending
+        advice.getOrder
     }
 
     Logger.info(s"Found ${resolvers.size} resolvers")
@@ -70,7 +71,7 @@ trait ControllerAdviceProcessor {
 
     //helper for Method's invocation
     def invokeMethod(method: jreflect.Method, targetBean: Object, ex: Exception) = {
-      //note: looks ugly
+      //Note: looks ugly
       method.getParameterTypes match {
         //there is no parameters
         case Array() =>
@@ -90,7 +91,7 @@ trait ControllerAdviceProcessor {
         //otherwise fail an exception
         case _ =>
           throw new NotImplementedError("Right now there are supported either methods without parameters, or methods which " +
-            "accepts mvc.Request and/or Exception itself")
+            "accepts mvc.RequestHeader and/or Exception itself")
       }
     }
 
@@ -105,7 +106,7 @@ trait ControllerAdviceProcessor {
         resolvedMethod != null
       } match {
         //if we found necessary pair
-        case Some((advice, resolver)) => {
+        case Some((advice, resolver)) =>
           val method = resolver.resolveMethod(e)
           val targetBean = advice.resolveBean
 
@@ -146,7 +147,6 @@ trait ControllerAdviceProcessor {
 
           //return Option of Future
           Some(Future.successful(result))
-        }
         //if didn't find anything, then return None
         case None =>
           None

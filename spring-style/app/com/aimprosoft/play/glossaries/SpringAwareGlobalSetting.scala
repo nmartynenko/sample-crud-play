@@ -12,23 +12,42 @@ import scala.concurrent.Future
 object SpringAwareGlobalSetting extends GlobalSettings
   with ControllerAdviceProcessor with SecurityInterceptor {
 
-  private var ctx: AbstractXmlApplicationContext = null
+  private var ctx: AbstractApplicationContext = null
 
   override def onStart(app: Application) {
     Logger.info("Initialize Spring context for Play application")
-    //create basic context
-    val basiCtx = new ClassPathXmlApplicationContext("spring/*.xml")
+
+    val basiCtx = Play.current.configuration.getString("spring.context") match {
+      //there should be some spring context
+      case Some(loc) =>
+        new GenericXmlApplicationContext(loc)
+      //otherwise fail an error
+      case _ =>
+        sys.error("There is no Spring locations configured")
+    }
+
+    ctx = Play.current.configuration.getString("spring.additional.context") match {
+      //check whether there are additional configs
+      case Some(loc) =>
+        //create new context
+        val addCtx = new GenericXmlApplicationContext()
+
+        //allow to proxy controllers with security annotations
+        addCtx.setParent(basiCtx)
+
+        //set config locations
+        addCtx.load(loc)
+
+        //refresh context
+        addCtx.refresh()
+
+        addCtx
+      //otherwise basic context is the main context
+      case _ =>
+        basiCtx
+    }
 
     Logger.info("Initialization is complete")
-
-    //allow to proxy controllers with security annotations
-    ctx = new ClassPathXmlApplicationContext(basiCtx)
-
-    //set config locations
-    ctx.setConfigLocation("controllers/spring-security-controllers.xml")
-
-    //refresh context
-    ctx.refresh()
 
     //init controller advices
     initControllerAdvice(ctx)

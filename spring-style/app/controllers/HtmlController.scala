@@ -12,7 +12,9 @@ class HtmlController extends Controller{
   def home() = Action {HOME}
 
   def index(lang: String = "en") = Action {request =>
-    Ok(views.html.index()(Lang(lang)))
+    implicit val language = Lang(lang)
+
+    Ok(views.html.index())
   }
 
 }
