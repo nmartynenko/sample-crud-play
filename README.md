@@ -1,6 +1,6 @@
 ## Sample CRUD application ##
 
-This is sample Play frameworkapplication, which is represented as:
+This is sample Play framework application, which is represented as:
 
 - <a href="http://en.wikipedia.org/wiki/Representational_state_transfer">RESTful server</a> on backend
 
@@ -11,9 +11,30 @@ Basically it is pretty straight-forward port of [sample-crud-mvc](https://github
 ### Applied technologies ###
 The major difference from the original is that all back-end is written with [Play Framework](http://www.playframework.com/)
 
-Beside Play, here is a stack of Java-based technologies:
+In order to "feel" the Play, there are 2 alternative implementations:
 
-- [Spring](http://www.springsource.org/) &mdash; IoC/DI/AOP container, as well as MVC-framework;
+- with Play stack only &mdash; [scala-style](scala-style);
+
+- with Spring stack &mdash; [spring-style](spring-style);
+
+####Play stack####
+It doesn't have any IoC/DI containers, as well as any "JavaEE-specific" frameworks.
+Beside play there is a stack of technologies:
+
+- [Slick](http://slick.typesafe.com/) &mdash; Scala ORM, supported by Typesafe;
+
+- [HyperSQL](http://hsqldb.org/) &mdash; embedded RDMBS;
+
+- [Deadbolt 2 Scala Plugin](https://github.com/schaloner/deadbolt-2) &mdash; advanced security plugin for Play;
+
+- [jBCrypt](http://www.mindrot.org/projects/jBCrypt/) &mdash; strong hashing function for security purposes;
+
+####Spring stack####
+Here is a stack of Java-based technologies:
+
+- [Spring](http://www.springsource.org/) &mdash; IoC/DI/AOP container;
+
+- [Spring Security](http://www.springsource.org/spring-security/) &mdash; ACL/security (it also uses JBCrypt hash function internally);
 
 - [Spring Data JPA](http://www.springsource.org/spring-data/jpa) &mdash; JPA persistence;
 
@@ -21,9 +42,15 @@ Beside Play, here is a stack of Java-based technologies:
 
 - [HyperSQL](http://hsqldb.org/) &mdash; embedded RDMBS;
 
+- [OVal](http://oval.sourceforge.net/) &mdash; object validation (for me it's more preferable than [JSR-303](http://jcp.org/en/jsr/detail?id=303));
+
+- [Jackson](http://jackson.codehaus.org/) &mdash; Java JSON processor along with [Jackson Scala module](https://github.com/FasterXML/jackson-module-scala);
+
+- [Spring Scala](https://github.com/spring-projects/spring-scala) &mdash; Spring support of Scala's classes and Scala's friendly wrappers;
+
 And lots of things, which are provided by Play itself.
 
-Here is a stack of Javascript-based technologies:
+In both cases there is the same stack of Javascript-based technologies:
 
 - [jQuery](http://jquery.com/) &mdash; main cross-browser framework;
 
@@ -65,9 +92,6 @@ The differences between them are in "write" abilities of Admin role.
 
 __Note__: by default, DB is In-Memory only, therefore all changes will disappear after server's stopped.
 
-### REST testing ###
-In ```/etc``` folder of project there is [curl](http://curl.haxx.se/)-based sample of collaborating with REST-server in non-browser environment (for *nix and win platforms).
-
 ### Dependencies ###
 For launching application you must to have installed:
 
@@ -80,11 +104,3 @@ For launching application you must to have installed:
 ### Known Issues ###
 This application is for training purposes of technologies listed above.
 The only issues may happen if there is wrong environment to launch the application.
-
-###TODO###
-
-* add validation
-
-* security should work
-
-* probably improve Play philosophy
