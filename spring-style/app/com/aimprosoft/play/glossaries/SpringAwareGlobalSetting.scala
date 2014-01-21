@@ -12,12 +12,12 @@ import scala.concurrent.Future
 object SpringAwareGlobalSetting extends GlobalSettings
   with ControllerAdviceProcessor with SecurityInterceptor {
 
-  private var ctx: AbstractApplicationContext = null
+  private var ctx: AbstractApplicationContext = _
 
   override def onStart(app: Application) {
     Logger.info("Initialize Spring context for Play application")
 
-    val basiCtx = Play.current.configuration.getString("spring.context") match {
+    val basicCtx = Play.current.configuration.getString("spring.context") match {
       //there should be some spring context
       case Some(loc) =>
         new GenericXmlApplicationContext(loc)
@@ -33,7 +33,7 @@ object SpringAwareGlobalSetting extends GlobalSettings
         val addCtx = new GenericXmlApplicationContext()
 
         //allow to proxy controllers with security annotations
-        addCtx.setParent(basiCtx)
+        addCtx.setParent(basicCtx)
 
         //set config locations
         addCtx.load(loc)
@@ -44,7 +44,7 @@ object SpringAwareGlobalSetting extends GlobalSettings
         addCtx
       //otherwise basic context is the main context
       case _ =>
-        basiCtx
+        basicCtx
     }
 
     Logger.info("Initialization is complete")
@@ -62,18 +62,21 @@ object SpringAwareGlobalSetting extends GlobalSettings
   }
 
   override def onRouteRequest(request: RequestHeader): Option[Handler] = {
-    setAuth(request)
+    //ignore static assets
+    if (!(request.path startsWith "/assets")){
+      setAuth(request)
+    }
 
     try {
       super.onRouteRequest(request)
     }
     catch {
       //handle only security exceptions
-      case e: AuthenticationException =>
+      case ex: AuthenticationException =>
         Some(Action {
           Redirect("/login.html")
         })
-      case e: AccessDeniedException =>
+      case ex: AccessDeniedException =>
         Some(Action {
           Unauthorized(views.html.defaultpages.unauthorized())
         })

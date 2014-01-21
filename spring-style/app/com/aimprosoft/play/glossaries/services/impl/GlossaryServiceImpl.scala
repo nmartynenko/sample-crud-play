@@ -1,14 +1,13 @@
 package com.aimprosoft.play.glossaries.services.impl
 
+import com.aimprosoft.play.glossaries.exceptions.{NoGlossaryFoundException, GlossaryException}
+import com.aimprosoft.play.glossaries.models.impl.Glossary
+import com.aimprosoft.play.glossaries.persistence.GlossaryPersistence
+import com.aimprosoft.play.glossaries.services.GlossaryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.data.domain.{Page, PageRequest,Pageable}
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Service
-import com.aimprosoft.play.glossaries.services.GlossaryService
-import com.aimprosoft.play.glossaries.persistence.GlossaryPersistence
-import com.aimprosoft.play.glossaries.exceptions.{NoGlossaryFoundException, GlossaryException}
-import com.aimprosoft.play.glossaries.models.impl.Glossary
 
 @Service
 class GlossaryServiceImpl extends GlossaryService {
@@ -47,7 +46,6 @@ class GlossaryServiceImpl extends GlossaryService {
   }
 
   @throws[GlossaryException]
-  @PreAuthorize("hasRole('ADMIN')")
   def addGlossary(glossary: Glossary): Unit = {
     try {
       glossaryPersistence.save(glossary)
@@ -57,7 +55,6 @@ class GlossaryServiceImpl extends GlossaryService {
   }
 
   @throws[GlossaryException]
-  @PreAuthorize("hasRole('ADMIN')")
   def updateGlossary(glossary: Glossary): Unit = {
     try {
       glossaryPersistence.save(glossary)
@@ -68,7 +65,6 @@ class GlossaryServiceImpl extends GlossaryService {
   }
 
   @throws[GlossaryException]
-  @PreAuthorize("hasRole('ADMIN')")
   def removeGlossary(glossary: Glossary): Unit = {
     try {
       glossaryPersistence.delete(glossary)
@@ -79,7 +75,6 @@ class GlossaryServiceImpl extends GlossaryService {
   }
 
   @throws[GlossaryException]
-  @PreAuthorize("hasRole('ADMIN')")
   def removeGlossaryById(glossaryId: Long): Unit = {
     try {
       glossaryPersistence.delete(glossaryId)
