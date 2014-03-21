@@ -33,7 +33,7 @@ class GlossaryServiceImpl extends GlossaryService with SlickTransactional {
 
   def updateGlossary(glossary: Glossary): Unit = transactional {
     implicit session: Session =>
-      GlossaryPersistence.update(glossary.id.get, glossary)
+      GlossaryPersistence.update(glossary)
   }
 
   def removeGlossary(glossary: Glossary): Unit = removeGlossaryById(glossary.id.get)

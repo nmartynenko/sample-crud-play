@@ -1,16 +1,13 @@
 package com.aimprosoft.play.glossaries.persistence
 
-import com.aimprosoft.play.glossaries.exceptions.{NoUserFoundException, NoGlossaryFoundException}
-import com.aimprosoft.play.glossaries.models._
-import play.api.Play.current
+import com.aimprosoft.play.glossaries.exceptions.NoUserFoundException
 import play.api.db.slick.Config.driver.simple._
-import play.api.db.slick.DB
-import scala.slick.driver.ExtendedDriver
-import scala.slick.lifted
+import com.aimprosoft.play.glossaries.models.Glossary
+import com.aimprosoft.play.glossaries.models.User
 
-trait Persistence[T <: AnyRef {val id : Option[Long]}] {
+trait Persistence[T, ID] {
 
-  def get(id: Long)(implicit session: Session): Option[T]
+  def get(id: ID)(implicit session: Session): Option[T]
 
   def list()(implicit session: Session): Seq[T]
 
@@ -20,44 +17,38 @@ trait Persistence[T <: AnyRef {val id : Option[Long]}] {
 
   def insertAll(entities: Seq[T])(implicit session: Session): Unit
 
-  def update(id: Long, entity: T)(implicit session: Session): Unit
+  def update(entity: T)(implicit session: Session): Unit
 
-  def delete(id: Long)(implicit session: Session): Unit
+  def delete(id: ID)(implicit session: Session): Unit
 
   def count(implicit session: Session): Int
 }
 
 //application DAO
-trait GlossaryPersistence extends Persistence[Glossary]
+trait GlossaryPersistence extends Persistence[Glossary, Long]
 
-trait UserPersistence extends Persistence[User] {
+trait UserPersistence extends Persistence[User, Long] {
   def findByEmail(email: String)(implicit session: Session): User
 }
 
 //application DAO objects
-object GlossaryPersistence extends SlickGlossaries
+object GlossaryPersistence extends SlickGlossariesPersistence
 
-object UserPersistence extends SlickUsers
+object UserPersistence extends SlickUsersPersistence
 
-/**
- * Helper for otherwise verbose Slick model definitions
- *
- * @author Manuel Bernhardt
- * @url http://manuel.bernhardt.io/2013/07/08/crud-trait-for-slick-models-in-the-play-framework/
- *
- */
-trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T] {
-  self: Table[T] =>
-
-  val byId = createFinderBy( t => t.id )
-
+abstract class SlickBaseTable[T](tag: Tag, tableName: String) extends Table[T](tag, tableName){
   def id: Column[Long]
+}
 
-  def * : scala.slick.lifted.ColumnBase[T]
+trait SlickBasePersistence[T <: {val id: Option[Long]}, TQ <: SlickBaseTable[T]] extends Persistence[T, Long] {
 
-  def autoInc = * returning id
+  val tableQuery: TableQuery[TQ]
 
-  def get(id: Long)(implicit session: Session): Option[T] = byId(id).firstOption
+  protected def byId(id: Long)(implicit session: Session): Option[T] = tableQuery.filter( _.id === id).firstOption
+
+  protected def autoInc = tableQuery returning tableQuery.map(_.id)
+
+  def get(id: Long)(implicit session: Session): Option[T] = byId(id)
 
   def list()(implicit session: Session): Seq[T] = {
     list(-1, -1)
@@ -65,7 +56,7 @@ trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T]
 
   def list(startRow: Int, pageSize: Int)(implicit session: Session): Seq[T] = {
     //create query for retrieving of all entities
-    var q = tableToQuery(self).map(t => t)
+    var q = tableQuery.map(e => e)
 
     //if it needs to be started from certain row
     if (startRow > 0){
@@ -89,28 +80,22 @@ trait SlickBaseModel[T <: AnyRef {val id : Option[Long]}] extends Persistence[T]
     autoInc.insertAll(entities: _*)
   }
 
-  def update(id: Long, entity: T)(implicit session: Session) {
-    tableQueryToUpdateInvoker(
-      tableToQuery(self).where(_.id === id)
-    ).update(entity)
+  def update(entity: T)(implicit session: Session) {
+    tableQuery.filter(_.id === entity.id).update(entity)
   }
 
   def delete(id: Long)(implicit session: Session) {
-    queryToDeleteInvoker(
-      tableToQuery(self).where(_.id === id)
-    ).delete
+    tableQuery.filter(_.id === id).delete
   }
 
   def count(implicit session: Session) = {
-      Query(tableToQuery(self).length).first
+    tableQuery.length.run
   }
 
 }
 
 //DB Models
-class SlickGlossaries extends Table[Glossary]("glossary")
-  with GlossaryPersistence
-  with SlickBaseModel[Glossary] {
+class SlickGlossaries(tag: Tag) extends SlickBaseTable[Glossary](tag, "glossary") {
 
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
@@ -118,12 +103,10 @@ class SlickGlossaries extends Table[Glossary]("glossary")
 
   def description = column[String]("description", O.Nullable)
 
-  def * = id.? ~ name ~ description.? <> (Glossary.apply _, Glossary.unapply _)
+  def * = (id.?, name, description.?) <> (Glossary.tupled, Glossary.unapply)
 }
 
-class SlickUsers extends Table[User]("glossary_user")
-  with UserPersistence
-  with SlickBaseModel[User] {
+class SlickUsers(tag: Tag) extends SlickBaseTable[User](tag, "glossary_user") {
 
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
@@ -135,13 +118,20 @@ class SlickUsers extends Table[User]("glossary_user")
 
   def role = column[String]("role")
 
-  def * = id.? ~ email ~ password ~ name ~ role <> (User.apply _, User.unapply _)
+  def * = (id.?, email, password, name, role) <> (User.tupled, User.unapply)
 
-  val byEmail = createFinderBy( t => t.email )
+}
 
-  def findByEmail(email: String)(implicit session: Session): User = {
-    byEmail(email).firstOption getOrElse {
-      throw new NoUserFoundException(username = email)
+class SlickUsersPersistence extends SlickBasePersistence[User, SlickUsers] with UserPersistence{
+  val tableQuery = TableQuery[SlickUsers]
+
+  def findByEmail(email: String)(implicit session: Session) = {
+    tableQuery.filter(_.email === email).firstOption getOrElse {
+        throw new NoUserFoundException(username = email)
     }
   }
+}
+
+class SlickGlossariesPersistence extends SlickBasePersistence[Glossary, SlickGlossaries] with GlossaryPersistence {
+  val tableQuery = TableQuery[SlickGlossaries]
 }

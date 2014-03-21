@@ -12,7 +12,7 @@ object ApplicationDDLCreator extends Listener{
     DB.withSession {implicit session: Session =>
       if (needsDdlCreation){
         Logger.info("Start updating DDL for application")
-        (UserPersistence.ddl ++ GlossaryPersistence.ddl).create
+        (UserPersistence.tableQuery.ddl ++ GlossaryPersistence.tableQuery.ddl).create
         Logger.info("Updating DDL for application has ended")
       }
     }

@@ -12,12 +12,12 @@ resolvers += Resolver.url("Objectify Play Snapshot Repository", url("http://scha
 
 libraryDependencies ++= Seq(
   //test dependencies
-  "org.scalatest" %% "scalatest" % "2.0" % "test",
+  "org.scalatest" %% "scalatest" % "2.1.2" % "test",
   "junit" % "junit" % "4.11" % "test",
   //runtime dependencies
-  "com.typesafe.slick" %% "slick" % "1.0.1",
-  "com.typesafe.play" %% "play-slick" % "0.5.0.8",
-  "org.hsqldb" % "hsqldb" % "2.3.1",
+  "com.typesafe.slick" %% "slick" % "2.0.0",
+  "com.typesafe.play" %% "play-slick" % "0.6.0.1",
+  "org.hsqldb" % "hsqldb" % "2.3.2",
   //security
   "be.objectify" %% "deadbolt-scala" % "2.2-RC2",
   "org.mindrot" % "jbcrypt" % "0.3m",
