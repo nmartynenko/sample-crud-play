@@ -31,9 +31,16 @@ abstract class SlickBaseTable[T, ID](tag: Tag, tableName: String) extends Table[
 trait SlickBasePersistence[T <: {val id: Option[ID]}, ID, TQ <: SlickBaseTable[T, ID]] extends Persistence[T, ID] {
 
   //Macro expansion methods
-  val tableQuery: TableQuery[TQ]
+  val tableQuery: TableQuery[TQ] /* = TableQuery[SlickGlossaries] */
 
-  def byId(id: ID)(implicit session: Session): Query[TQ, T]
+  def byId(id: ID)(implicit session: Session): Query[TQ, T] /* tableQuery.filter(_.id === id) */
+
+  def byId(idOpt: Option[ID])(implicit session: Session): Query[TQ, T] = {
+    idOpt match {
+      case Some(id) => byId(id)
+      case _ => throw new IllegalArgumentException("ID option should not be None")
+    }
+  }
 
   //base methods
   protected def autoInc = tableQuery returning tableQuery.map(_.id)
@@ -71,7 +78,7 @@ trait SlickBasePersistence[T <: {val id: Option[ID]}, ID, TQ <: SlickBaseTable[T
   }
 
   def update(entity: T)(implicit session: Session) {
-    byId(entity.id.get).update(entity)
+    byId(entity.id).update(entity)
   }
 
   def delete(id: ID)(implicit session: Session) {
