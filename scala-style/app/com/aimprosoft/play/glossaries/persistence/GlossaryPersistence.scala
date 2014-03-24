@@ -48,7 +48,10 @@ class SlickUsers(tag: Tag) extends SlickBaseTable[User, Long](tag, "glossary_use
 class SlickUsersPersistence extends SlickBasePersistence[User, Long, SlickUsers]
   with UserPersistence{
 
+  //Macro expansion implementation
   val tableQuery = TableQuery[SlickUsers]
+
+  def byId(id: Long)(implicit session: Session) = tableQuery.filter(_.id === id)
 
   def findByEmail(email: String)(implicit session: Session) = {
     tableQuery.filter(_.email === email).firstOption getOrElse {
@@ -59,5 +62,10 @@ class SlickUsersPersistence extends SlickBasePersistence[User, Long, SlickUsers]
 
 class SlickGlossariesPersistence extends SlickBasePersistence[Glossary, Long, SlickGlossaries]
   with GlossaryPersistence {
+
+  //Macro expansion implementation
   val tableQuery = TableQuery[SlickGlossaries]
+
+  def byId(id: Long)(implicit session: Session) = tableQuery.filter(_.id === id)
+
 }

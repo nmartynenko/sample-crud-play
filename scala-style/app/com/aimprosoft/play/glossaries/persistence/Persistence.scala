@@ -1,6 +1,7 @@
 package com.aimprosoft.play.glossaries.persistence
 
 import play.api.db.slick.Config.driver.simple._
+import scala.language.reflectiveCalls
 
 //abstract persistence trait
 trait Persistence[T, ID] {
@@ -22,20 +23,22 @@ trait Persistence[T, ID] {
   def count(implicit session: Session): Int
 }
 
-//abstract
+//abstract table entity
 abstract class SlickBaseTable[T, ID](tag: Tag, tableName: String) extends Table[T](tag, tableName){
   def id: Column[ID]
 }
 
 trait SlickBasePersistence[T <: {val id: Option[ID]}, ID, TQ <: SlickBaseTable[T, ID]] extends Persistence[T, ID] {
 
+  //Macro expansion methods
   val tableQuery: TableQuery[TQ]
 
-  protected def byId(id: ID)(implicit session: Session): Option[T] = tableQuery.filter(_.id === id).firstOption
+  def byId(id: ID)(implicit session: Session): Query[TQ, T]
 
+  //base methods
   protected def autoInc = tableQuery returning tableQuery.map(_.id)
 
-  def get(id: ID)(implicit session: Session): Option[T] = byId(id)
+  def get(id: ID)(implicit session: Session): Option[T] = byId(id).firstOption
 
   def list()(implicit session: Session): Seq[T] = {
     list(-1, -1)
@@ -68,11 +71,11 @@ trait SlickBasePersistence[T <: {val id: Option[ID]}, ID, TQ <: SlickBaseTable[T
   }
 
   def update(entity: T)(implicit session: Session) {
-    tableQuery.filter(_.id === entity.id).update(entity)
+    byId(entity.id.get).update(entity)
   }
 
   def delete(id: ID)(implicit session: Session) {
-    tableQuery.filter(_.id === id).delete
+    byId(id).delete
   }
 
   def count(implicit session: Session) = {
