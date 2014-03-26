@@ -16,7 +16,7 @@ resolvers += Resolver.url("Objectify Play Snapshot Repository", url("http://scha
 
 //scala's compiler and runtime settings
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.4"
 
 scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation")
 

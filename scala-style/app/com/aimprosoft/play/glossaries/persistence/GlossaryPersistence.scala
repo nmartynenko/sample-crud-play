@@ -51,8 +51,6 @@ class SlickUsersPersistence extends SlickBasePersistence[User, Long, SlickUsers]
   //Macro expansion implementation
   val tableQuery = TableQuery[SlickUsers]
 
-  def byId(id: Long)(implicit session: Session) = tableQuery.filter(_.id === id)
-
   def findByEmail(email: String)(implicit session: Session) = {
     tableQuery.filter(_.email === email).firstOption getOrElse {
       throw new NoUserFoundException(username = email)
@@ -65,7 +63,5 @@ class SlickGlossariesPersistence extends SlickBasePersistence[Glossary, Long, Sl
 
   //Macro expansion implementation
   val tableQuery = TableQuery[SlickGlossaries]
-
-  def byId(id: Long)(implicit session: Session) = tableQuery.filter(_.id === id)
 
 }

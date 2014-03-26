@@ -28,12 +28,12 @@ abstract class SlickBaseTable[T, ID](tag: Tag, tableName: String) extends Table[
   def id: Column[ID]
 }
 
-trait SlickBasePersistence[T <: {val id: Option[ID]}, ID, TQ <: SlickBaseTable[T, ID]] extends Persistence[T, ID] {
+abstract class SlickBasePersistence[T <: {val id: Option[ID]}, ID: BaseColumnType, TQ <: SlickBaseTable[T, ID]] extends Persistence[T, ID] {
 
   //Macro expansion methods
-  val tableQuery: TableQuery[TQ] /* = TableQuery[SlickGlossaries] */
+  val tableQuery: TableQuery[TQ] /* = TableQuery[TQ] */
 
-  def byId(id: ID)(implicit session: Session): Query[TQ, T] /* tableQuery.filter(_.id === id) */
+  def byId(id: ID)(implicit session: Session): Query[TQ, T] = tableQuery.filter(_.id === id)
 
   def byId(idOpt: Option[ID])(implicit session: Session): Query[TQ, T] = {
     idOpt match {
