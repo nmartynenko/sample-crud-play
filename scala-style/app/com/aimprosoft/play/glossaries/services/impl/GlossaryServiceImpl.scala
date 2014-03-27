@@ -10,10 +10,22 @@ class GlossaryServiceImpl extends GlossaryService with SlickTransactional {
 
   def getCurrentPage(startRow: Int, pageSize: Int): GlossaryPageResponse = readOnly {
     implicit session: Session => {
+      //list of entities
       val content = GlossaryPersistence.list(startRow, pageSize)
-      
-      val te = if (pageSize < 0) content.size else GlossaryPersistence.count
+
+      //number of all elements in DB
+      val te = {
+        //quick check for not working with DB
+        if (startRow <= 0 && pageSize < 0)
+          content.size
+        //check in DB otherwise
+        else
+          GlossaryPersistence.count
+      }
+
+      //adjust start row
       val sr = if (startRow < 0) 0 else startRow
+      //adjust page size
       val ps = if (pageSize > 0) pageSize else te
 
       GlossaryPageResponse(content, sr, ps, te)
@@ -21,24 +33,26 @@ class GlossaryServiceImpl extends GlossaryService with SlickTransactional {
   }
 
 
-  def getGlossaryById(glossaryId: Long): Option[Glossary] = readOnly {
+  def getById(glossaryId: Long): Option[Glossary] = readOnly {
     implicit session: Session =>
       GlossaryPersistence.get(glossaryId)
   }
 
-  def addGlossary(glossary: Glossary): Unit = transactional {
+  def add(glossary: Glossary): Unit = transactional {
     implicit session: Session =>
       GlossaryPersistence.insert(glossary)
   }
 
-  def updateGlossary(glossary: Glossary): Unit = transactional {
+  def update(glossary: Glossary): Unit = transactional {
     implicit session: Session =>
       GlossaryPersistence.update(glossary)
   }
 
-  def removeGlossary(glossary: Glossary): Unit = removeGlossaryById(glossary.id.get)
+  def remove(glossary: Glossary): Unit = glossary.id foreach { id =>
+    removeById(id)
+  }
 
-  def removeGlossaryById(glossaryId: Long): Unit = transactional {
+  def removeById(glossaryId: Long): Unit = transactional {
     implicit session: Session =>
       GlossaryPersistence.delete(glossaryId)
   }

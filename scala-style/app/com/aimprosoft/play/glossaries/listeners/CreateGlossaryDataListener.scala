@@ -36,6 +36,7 @@ object CreateGlossaryDataListener extends Listener {
   }
 
   def init() {
+    //it can't be too much glossaries
     Logger.info("Start adding sample glossaries")
 
     val random = new Random()
@@ -49,7 +50,7 @@ object CreateGlossaryDataListener extends Listener {
         description = Some(DESCRIPTIONS(descIndex))
       )
 
-      GlossaryService.addGlossary(glossary)
+      GlossaryService.add(glossary)
     }
 
     Logger.info("End adding sample glossaries")

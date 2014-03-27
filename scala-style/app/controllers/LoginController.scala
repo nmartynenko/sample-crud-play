@@ -59,7 +59,7 @@ object LoginController extends SecuredController {
   }
 
   def logout = Action {
-    Redirect(routes.LoginController.login).withNewSession.flashing(
+    Redirect(routes.LoginController.login()).withNewSession.flashing(
       "success" -> "You are now logged out."
     )
   }

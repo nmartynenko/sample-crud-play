@@ -8,15 +8,15 @@ trait GlossaryService {
 
   def getCurrentPage(startRow: Int, pageSize: Int): GlossaryPageResponse
 
-  def getGlossaryById(glossaryId: Long): Option[Glossary]
+  def getById(glossaryId: Long): Option[Glossary]
 
-  def addGlossary(glossary: Glossary): Unit
+  def add(glossary: Glossary): Unit
 
-  def updateGlossary(glossary: Glossary): Unit
+  def update(glossary: Glossary): Unit
 
-  def removeGlossary(glossary: Glossary): Unit
+  def remove(glossary: Glossary): Unit
 
-  def removeGlossaryById(glossaryId: Long): Unit
+  def removeById(glossaryId: Long): Unit
 
 }
 

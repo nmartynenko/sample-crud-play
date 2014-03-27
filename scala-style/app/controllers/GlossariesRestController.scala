@@ -24,7 +24,7 @@ object GlossariesRestController extends SecuredController {
 
   def getGlossary(id: Long) = authenticated {
     Action {
-      GlossaryService.getGlossaryById(id) match {
+      GlossaryService.getById(id) match {
         case Some(glossary) =>
           Ok(Json.toJson(glossary)).as(ContentTypes.JSON)
         case _ =>
@@ -35,18 +35,18 @@ object GlossariesRestController extends SecuredController {
 
   def removeGlossary(glossaryId: Long) =  asAdmin {
     Action {
-      GlossaryService.removeGlossaryById(glossaryId)
+      GlossaryService.removeById(glossaryId)
 
       Ok
     }
   }
 
   def updateGlossary() = asAdmin {
-    saveUpdate {GlossaryService.updateGlossary}
+    saveUpdate {GlossaryService.update}
   }
 
   def saveGlossary = asAdmin {
-    saveUpdate {GlossaryService.addGlossary}
+    saveUpdate {GlossaryService.add}
   }
 
   private def saveUpdate(action: Glossary => Unit) = Action(parse.json) {

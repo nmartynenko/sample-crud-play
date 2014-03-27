@@ -7,16 +7,10 @@ import play.api.mvc._
 trait SecuredController extends Controller with DeadboltActions {
   protected val HOME = Redirect("/index.html")
 
-  def authenticated[T]: (Action[T]) => Action[T] = {
-    SubjectPresent(SubjectPresentGlossaryUserDeadboltHandler)
-  }
+  def authenticated[T]: (Action[T]) => Action[T] = SubjectPresent(SubjectPresentGlossaryUserDeadboltHandler)
 
-  def notAuthenticated[T]: (Action[T]) => Action[T] = {
-    SubjectNotPresent(SubjectNotPresentGlossaryUserDeadboltHandler)
-  }
+  def notAuthenticated[T]: (Action[T]) => Action[T] = SubjectNotPresent(SubjectNotPresentGlossaryUserDeadboltHandler)
 
-  def asAdmin[T]: (Action[T]) => Action[T] = {
-    Restrict(Array("admin"), SubjectPresentGlossaryUserDeadboltHandler)
-  }
+  def asAdmin[T]: (Action[T]) => Action[T] = Restrict(Array("admin"), SubjectPresentGlossaryUserDeadboltHandler)
 
 }

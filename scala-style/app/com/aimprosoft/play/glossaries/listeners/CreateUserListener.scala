@@ -16,7 +16,10 @@ object CreateUserListener extends Listener {
       role = "USER"
     )
 
-    UserService.addUser(user)
+    //add user if it doesn't exists
+    UserService.getByEmail(user.email).getOrElse {
+      UserService.add(user)
+    }
 
     Logger.info("Sample user has been added successfully")
   }

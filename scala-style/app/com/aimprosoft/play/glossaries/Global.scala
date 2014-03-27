@@ -14,8 +14,9 @@ object Global extends GlobalSettings{
 
     //it might be better to improve scanning
     val listeners = List(ApplicationDDLCreator, CreateAdminListener, CreateUserListener, CreateGlossaryDataListener)
-    for(listener <- listeners){
-      listener.init()
+
+    listeners foreach {
+      _.init()
     }
 
     Logger.info("Initialization has ended")

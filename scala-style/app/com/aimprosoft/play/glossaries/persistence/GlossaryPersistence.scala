@@ -2,13 +2,12 @@ package com.aimprosoft.play.glossaries.persistence
 
 import play.api.db.slick.Config.driver.simple._
 import com.aimprosoft.play.glossaries.models.{User, Glossary}
-import com.aimprosoft.play.glossaries.exceptions.NoUserFoundException
 
 //application DAO
 trait GlossaryPersistence extends Persistence[Glossary, Long]
 
 trait UserPersistence extends Persistence[User, Long] {
-  def findByEmail(email: String)(implicit session: Session): User
+  def findByEmail(email: String)(implicit session: Session): Option[User]
 }
 
 //application DAO objects
@@ -51,10 +50,8 @@ class SlickUsersPersistence extends SlickBasePersistence[User, Long, SlickUsers]
   //Macro expansion implementation
   val tableQuery = TableQuery[SlickUsers]
 
-  def findByEmail(email: String)(implicit session: Session) = {
-    tableQuery.filter(_.email === email).firstOption getOrElse {
-      throw new NoUserFoundException(username = email)
-    }
+  def findByEmail(email: String)(implicit session: Session): Option[User] = {
+    tableQuery.filter(_.email === email).firstOption
   }
 }
 

@@ -16,7 +16,10 @@ object CreateAdminListener extends Listener{
       role = "ADMIN"
     )
 
-    UserService.addUser(user)
+    //add user if it doesn't exists
+    UserService.getByEmail(user.email).getOrElse {
+      UserService.add(user)
+    }
 
     Logger.info("Sample admin has been added successfully")
   }

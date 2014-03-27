@@ -28,11 +28,13 @@ abstract class SlickBaseTable[T, ID](tag: Tag, tableName: String) extends Table[
   def id: Column[ID]
 }
 
-abstract class SlickBasePersistence[T <: {val id: Option[ID]}, ID: BaseColumnType, TQ <: SlickBaseTable[T, ID]] extends Persistence[T, ID] {
+abstract class SlickBasePersistence[T <: {val id: Option[ID]}, ID: BaseColumnType, TQ <: SlickBaseTable[T, ID]]
+  extends Persistence[T, ID] {
 
-  //Macro expansion methods
+  //Macro expansion value
   val tableQuery: TableQuery[TQ] /* = TableQuery[TQ] */
 
+  //helper methods
   def byId(id: ID)(implicit session: Session): Query[TQ, T] = tableQuery.filter(_.id === id)
 
   def byId(idOpt: Option[ID])(implicit session: Session): Query[TQ, T] = {
@@ -42,9 +44,9 @@ abstract class SlickBasePersistence[T <: {val id: Option[ID]}, ID: BaseColumnTyp
     }
   }
 
-  //base methods
   protected def autoInc = tableQuery returning tableQuery.map(_.id)
 
+  //base methods
   def get(id: ID)(implicit session: Session): Option[T] = byId(id).firstOption
 
   def list()(implicit session: Session): Seq[T] = {
@@ -69,7 +71,7 @@ abstract class SlickBasePersistence[T <: {val id: Option[ID]}, ID: BaseColumnTyp
     q.list()
   }
 
-  def insert(entity: T)(implicit session: Session) = {
+  def insert(entity: T)(implicit session: Session): ID = {
     autoInc.insert(entity)
   }
 
@@ -85,7 +87,7 @@ abstract class SlickBasePersistence[T <: {val id: Option[ID]}, ID: BaseColumnTyp
     byId(id).delete
   }
 
-  def count(implicit session: Session) = {
+  def count(implicit session: Session): Int = {
     tableQuery.length.run
   }
 

@@ -8,15 +8,15 @@ import play.api.db.slick.Session
 
 class UserServiceImpl extends UserService with SlickTransactional {
 
-  def addUser(user: User): Unit = readOnly {
+  def add(user: User): Unit = readOnly {
     implicit session: Session =>
       //hash plain text password
       val hashedPassword = BCrypt.hashpw(user.password, BCrypt.gensalt())
 
-      UserPersistence.insert(user copy (password = hashedPassword))
+      UserPersistence.insert(user.copy(password = hashedPassword))
   }
 
-  def getUserByEmail(email: String): User = transactional {
+  def getByEmail(email: String): Option[User] = transactional {
     implicit session: Session =>
       UserPersistence.findByEmail(email)
   }

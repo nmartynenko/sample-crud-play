@@ -5,9 +5,9 @@ import com.aimprosoft.play.glossaries.services.impl.UserServiceImpl
 
 trait UserService {
 
-  def addUser(user: User)
+  def add(user: User)
 
-  def getUserByEmail(username: String): User
+  def getByEmail(username: String): Option[User]
 }
 
 object UserService extends UserServiceImpl
