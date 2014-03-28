@@ -1,13 +1,14 @@
 import com.aimprosoft.play.glossaries.domain.GlossaryPageResponse
 import com.aimprosoft.play.glossaries.models.{Glossary, User}
 import com.aimprosoft.play.glossaries.security.GlossaryUserSubject
+import com.aimprosoft.play.glossaries.service.GlossaryService
 import org.specs2.mutable._
 import org.specs2.runner._
 import org.junit.runner._
 
 import play.api.cache.Cache
 import play.api.http.HeaderNames
-import play.api.libs.json.JsObject
+import play.api.libs.json.{Json, JsObject}
 import play.api.mvc.Security
 import play.api.test._
 import play.api.test.Helpers._
@@ -18,7 +19,10 @@ import play.api.test.Helpers._
  * For more information, consult the wiki.
  */
 @RunWith(classOf[JUnitRunner])
-class ApplicationSpec extends Specification{
+class ApplicationSpec extends Specification {
+
+  implicit def gf = controllers.GlossariesRestController.gf
+  implicit def gpf = controllers.GlossariesRestController.gpf
 
   "Application" should {
 
@@ -141,7 +145,7 @@ class ApplicationSpec extends Specification{
           contentType(glossariesPage) must beSome.which(_ == "application/json")
 
           val response = contentAsJson(glossariesPage).
-            as[GlossaryPageResponse](controllers.GlossariesRestController.gpf)
+            as[GlossaryPageResponse]
           //there is no pagination
           response.content must haveLength(response.totalElements)
       }
@@ -165,11 +169,78 @@ class ApplicationSpec extends Specification{
           status(glossariesPage) must equalTo(OK)
           contentType(glossariesPage) must beSome.which(_ == "application/json")
 
-          val response = contentAsJson(glossariesPage).
-            as[Glossary](controllers.GlossariesRestController.gf)
+          val response = contentAsJson(glossariesPage).as[Glossary]
 
           response.id must beSome.which(_ == id)
       }
+    }
+
+    "reject removal of particular glossary for regular users" in new WithApplication {
+      //be authenticated
+      authenticateAllUsers
+
+      //make sure that cache has actual data
+      Cache.get(userUsername) must beSome(userSubject)
+
+      val id: Long = 1
+
+      //this glossary must be present in DB
+      GlossaryService.exists(id) must beTrue
+
+      val glossariesPage = route(
+        FakeRequest(DELETE, s"/glossaries/$id").withSession(Security.username -> userUsername)
+      ).get
+
+      status(glossariesPage) must equalTo(FORBIDDEN)
+
+      //this glossary must be still present in DB
+      GlossaryService.exists(id) must beTrue
+    }
+
+    "allow removal of particular glossary for admin users" in new WithApplication {
+      //be authenticated
+      authenticateAllUsers
+
+      //make sure that cache has actual data
+      Cache.get(adminUsername) must beSome(adminSubject)
+
+      val id: Long = 1
+
+      //this glossary must be present in DB
+      GlossaryService.exists(id) must beTrue
+
+      val glossariesPage = route(
+        FakeRequest(DELETE, s"/glossaries/$id").withSession(Security.username -> adminUsername)
+      ).get
+
+      status(glossariesPage) must equalTo(OK)
+
+      //this glossary must be not present in DB
+      GlossaryService.exists(id) must beFalse
+    }
+
+    "reject adding of particular glossary for regular users" in new WithApplication {
+      //be authenticated
+      authenticateAllUsers
+
+      //make sure that cache has actual data
+      Cache.get(userUsername) must beSome(userSubject)
+
+      //initial number of glossaries
+      val initialCount = GlossaryService.count()
+
+      val glossary = Glossary(name = "Try to add")
+
+      val glossariesPage = route(
+        FakeRequest(PUT, "/glossaries")
+          .withSession(Security.username -> userUsername)
+          .withJsonBody(Json.toJson(glossary))
+      ).get
+
+      status(glossariesPage) must equalTo(FORBIDDEN)
+
+      //number of glossaries must remain the same
+      GlossaryService.count() must equalTo(initialCount)
     }
 
     "logout page should redirect to login page" in new WithApplication {
@@ -188,7 +259,7 @@ class ApplicationSpec extends Specification{
           ).get
 
           status(logoutUrl) must equalTo(SEE_OTHER)
-          headers(logoutUrl) must havePair(HeaderNames.LOCATION, "/login.html")
+          headers(logoutUrl) must havePair(HeaderNames.LOCATION -> "/login.html")
       }
     }
   }

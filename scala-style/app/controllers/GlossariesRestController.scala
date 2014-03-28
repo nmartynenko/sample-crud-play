@@ -2,7 +2,7 @@ package controllers
 
 import com.aimprosoft.play.glossaries.domain.GlossaryPageResponse
 import com.aimprosoft.play.glossaries.models.Glossary
-import com.aimprosoft.play.glossaries.services.GlossaryService
+import com.aimprosoft.play.glossaries.service.GlossaryService
 import play.api.data.validation.ValidationError
 import play.api.http.ContentTypes
 import play.api.i18n.{Lang, Messages}
@@ -16,7 +16,10 @@ object GlossariesRestController extends SecuredController {
 
   def getGlossaries(startRow: Int, pageSize: Int) = authenticated {
     Action {
-      val glossariesPage = GlossaryService.getCurrentPage(startRow, pageSize)
+      //get generic page
+      val page = GlossaryService.getCurrentPage(startRow, pageSize)
+      //convert into concrete response page
+      val glossariesPage = GlossaryPageResponse(page.content, page.startRow, page.pageSize, page.totalElements)
 
       Ok(Json.toJson(glossariesPage)).as(ContentTypes.JSON)
     }

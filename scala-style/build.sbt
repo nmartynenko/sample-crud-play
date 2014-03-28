@@ -24,7 +24,6 @@ scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation")
 
 libraryDependencies ++= Seq(
   //test dependencies
-  "org.scalatest" %% "scalatest" % "2.1.2" % "test",
   "junit" % "junit" % "4.11" % "test",
   //runtime dependencies
   "com.typesafe.slick" %% "slick" % "2.0.1",

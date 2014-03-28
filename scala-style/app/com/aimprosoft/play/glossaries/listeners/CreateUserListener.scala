@@ -1,7 +1,7 @@
 package com.aimprosoft.play.glossaries.listeners
 
 import com.aimprosoft.play.glossaries.models.User
-import com.aimprosoft.play.glossaries.services.UserService
+import com.aimprosoft.play.glossaries.service.UserService
 import play.api.Logger
 
 object CreateUserListener extends Listener {

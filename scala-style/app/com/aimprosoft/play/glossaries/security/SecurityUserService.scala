@@ -1,7 +1,7 @@
 package com.aimprosoft.play.glossaries.security
 
 import be.objectify.deadbolt.core.models.Subject
-import com.aimprosoft.play.glossaries.services.UserService
+import com.aimprosoft.play.glossaries.service.UserService
 import org.mindrot.jbcrypt.BCrypt
 
 trait SecurityUserService {

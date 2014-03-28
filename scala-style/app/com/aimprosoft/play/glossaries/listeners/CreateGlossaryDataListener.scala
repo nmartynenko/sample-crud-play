@@ -1,7 +1,7 @@
 package com.aimprosoft.play.glossaries.listeners
 
 import com.aimprosoft.play.glossaries.models.Glossary
-import com.aimprosoft.play.glossaries.services.GlossaryService
+import com.aimprosoft.play.glossaries.service.GlossaryService
 import play.api.Logger
 import scala.util.Random
 

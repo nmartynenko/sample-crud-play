@@ -6,6 +6,8 @@ import scala.language.reflectiveCalls
 //abstract persistence trait
 trait Persistence[T, ID] {
 
+  def exists(id: ID)(implicit session: Session): Boolean
+
   def get(id: ID)(implicit session: Session): Option[T]
 
   def list()(implicit session: Session): Seq[T]
@@ -47,6 +49,8 @@ abstract class SlickBasePersistence[T <: {val id: Option[ID]}, ID: BaseColumnTyp
   protected def autoInc = tableQuery returning tableQuery.map(_.id)
 
   //base methods
+  def exists(id: ID)(implicit session: Session): Boolean = byId(id).length.run > 0
+
   def get(id: ID)(implicit session: Session): Option[T] = byId(id).firstOption
 
   def list()(implicit session: Session): Seq[T] = {
