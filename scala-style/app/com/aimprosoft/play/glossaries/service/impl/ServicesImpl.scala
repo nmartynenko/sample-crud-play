@@ -52,9 +52,14 @@ trait BaseCrudServiceImpl[T <: {val id: Option[Long]}, P <: Persistence[T, Long]
       persistence.exists(id)
   }
 
-  def count(): Int = readOnly {
+  def count: Int = readOnly {
     implicit session: Session =>
       persistence.count
+  }
+
+  def getFirst: Option[T] = readOnly {
+    implicit session: Session =>
+      persistence.list(0, 1).headOption
   }
 
   def getById(id: Long): Option[T] = readOnly {

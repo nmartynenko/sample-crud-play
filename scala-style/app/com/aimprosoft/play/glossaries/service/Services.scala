@@ -10,7 +10,9 @@ trait BaseCrudService[T] {
 
   def exists(glossaryId: Long): Boolean
 
-  def count(): Int
+  def count: Int
+
+  def getFirst: Option[T]
 
   def getById(glossaryId: Long): Option[T]
 

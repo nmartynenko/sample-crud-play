@@ -10,7 +10,7 @@ trait Persistence[T, ID] {
 
   def get(id: ID)(implicit session: Session): Option[T]
 
-  def list()(implicit session: Session): Seq[T]
+  def list(implicit session: Session): Seq[T]
 
   def list(startRow: Int = -1, pageSize: Int = -1)(implicit session: Session): Seq[T]
 
@@ -53,7 +53,7 @@ abstract class SlickBasePersistence[T <: {val id: Option[ID]}, ID: BaseColumnTyp
 
   def get(id: ID)(implicit session: Session): Option[T] = byId(id).firstOption
 
-  def list()(implicit session: Session): Seq[T] = {
+  def list(implicit session: Session): Seq[T] = {
     list(-1, -1)
   }
 

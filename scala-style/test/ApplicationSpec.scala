@@ -30,7 +30,7 @@ class ApplicationSpec extends Specification {
       var rootRoute = route(FakeRequest(GET, "/")).get
 
       status(rootRoute) must equalTo(SEE_OTHER)
-      headers(rootRoute) must havePair(HeaderNames.LOCATION, "/index.html")
+      headers(rootRoute) must havePair(HeaderNames.LOCATION -> "/index.html")
     }
 
     "send 404 on a bad request" in new WithApplication {
@@ -204,7 +204,7 @@ class ApplicationSpec extends Specification {
       //make sure that cache has actual data
       Cache.get(adminUsername) must beSome(adminSubject)
 
-      val id: Long = 1
+      val id: Long = 2
 
       //this glossary must be present in DB
       GlossaryService.exists(id) must beTrue
@@ -227,7 +227,7 @@ class ApplicationSpec extends Specification {
       Cache.get(userUsername) must beSome(userSubject)
 
       //initial number of glossaries
-      val initialCount = GlossaryService.count()
+      val initialCount = GlossaryService.count
 
       val glossary = Glossary(name = "Try to add")
 
@@ -240,7 +240,31 @@ class ApplicationSpec extends Specification {
       status(glossariesPage) must equalTo(FORBIDDEN)
 
       //number of glossaries must remain the same
-      GlossaryService.count() must equalTo(initialCount)
+      GlossaryService.count must equalTo(initialCount)
+    }
+
+    "reject adding of particular glossary for regular users" in new WithApplication {
+      //be authenticated
+      authenticateAllUsers
+
+      //make sure that cache has actual data
+      Cache.get(adminUsername) must beSome(adminSubject)
+
+      //initial number of glossaries
+      val initialCount = GlossaryService.count
+
+      val glossary = Glossary(name = "Try to add")
+
+      val glossariesPage = route(
+        FakeRequest(PUT, "/glossaries")
+          .withSession(Security.username -> adminUsername)
+          .withJsonBody(Json.toJson(glossary))
+      ).get
+
+      status(glossariesPage) must equalTo(OK)
+
+      //number of glossaries must remain the same
+      GlossaryService.count must equalTo(initialCount + 1)
     }
 
     "logout page should redirect to login page" in new WithApplication {
