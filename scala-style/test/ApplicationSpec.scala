@@ -243,7 +243,7 @@ class ApplicationSpec extends Specification {
       GlossaryService.count must equalTo(initialCount)
     }
 
-    "reject adding of particular glossary for regular users" in new WithApplication {
+    "allow adding of particular glossary for admin users with no glossary's ID" in new WithApplication {
       //be authenticated
       authenticateAllUsers
 
@@ -263,8 +263,139 @@ class ApplicationSpec extends Specification {
 
       status(glossariesPage) must equalTo(OK)
 
-      //number of glossaries must remain the same
+      //number of glossaries must be increase by one
       GlossaryService.count must equalTo(initialCount + 1)
+    }
+
+    "allow adding of particular glossary for admin users with no predefined ID" in new WithApplication {
+      //be authenticated
+      authenticateAllUsers
+
+      //make sure that cache has actual data
+      Cache.get(adminUsername) must beSome(adminSubject)
+
+      //initial number of glossaries
+      val initialCount = GlossaryService.count
+
+      val id = 100500
+
+      val glossary = Glossary(id = Some(id), name = "Try to add")
+
+      //this glossary must not be present in DB
+      GlossaryService.exists(id) must beFalse
+
+      val glossariesPage = route(
+        FakeRequest(PUT, "/glossaries")
+          .withSession(Security.username -> adminUsername)
+          .withJsonBody(Json.toJson(glossary))
+      ).get
+
+      status(glossariesPage) must equalTo(OK)
+
+      //this glossary must not be present in DB
+      GlossaryService.exists(id) must beFalse
+
+      //number of glossaries must be increase by one
+      GlossaryService.count must equalTo(initialCount + 1)
+    }
+
+    "reject updating of particular glossary for regular users" in new WithApplication {
+      //be authenticated
+      authenticateAllUsers
+
+      //make sure that cache has actual data
+      Cache.get(userUsername) must beSome(userSubject)
+
+      //particular glossary's id
+      val id = 1
+
+      //this glossary must be present in DB
+      GlossaryService.exists(id) must beTrue
+
+      //initial number of glossaries
+      val dbGlossary = GlossaryService.getById(id).get
+
+      val newGlossary = dbGlossary.copy(name = "Try to update")
+
+      //this should be different glossaries
+      newGlossary mustNotEqual dbGlossary
+
+      val glossariesPage = route(
+        FakeRequest(POST, "/glossaries")
+          .withSession(Security.username -> userUsername)
+          .withJsonBody(Json.toJson(newGlossary))
+      ).get
+
+      status(glossariesPage) must equalTo(FORBIDDEN)
+
+      //stored glossary must remain the same
+      GlossaryService.getById(id).get must equalTo(dbGlossary)
+    }
+
+    "allow updating of particular glossary for admin users with valid id" in new WithApplication {
+      //be authenticated
+      authenticateAllUsers
+
+      //make sure that cache has actual data
+      Cache.get(adminUsername) must beSome(adminSubject)
+
+      //particular glossary's id
+      val id = 3
+
+      //this glossary must be present in DB
+      GlossaryService.exists(id) must beTrue
+
+      //initial number of glossaries
+      val dbGlossary = GlossaryService.getById(id).get
+
+      val newGlossary = dbGlossary.copy(name = "Try to update")
+
+      //this should be different glossaries
+      newGlossary mustNotEqual dbGlossary
+
+      val glossariesPage = route(
+        FakeRequest(POST, "/glossaries")
+          .withSession(Security.username -> adminUsername)
+          .withJsonBody(Json.toJson(newGlossary))
+      ).get
+
+      status(glossariesPage) must equalTo(OK)
+
+      //stored glossary must be updated
+      GlossaryService.getById(id).get must equalTo(newGlossary)
+    }
+
+    "reject updating of particular glossary for admin users with invalid id" in new WithApplication {
+      //be authenticated
+      authenticateAllUsers
+
+      //make sure that cache has actual data
+      Cache.get(adminUsername) must beSome(adminSubject)
+
+      //particular glossary's id
+      val id = 100500
+
+      //this glossary must be present in DB
+      GlossaryService.exists(id) must beFalse
+
+      val dbCount = GlossaryService.count
+
+      //initial number of glossaries
+      val newGlossary = Glossary(id = Some(id), name = "Try to update")
+
+      val glossariesPage = route(
+        FakeRequest(POST, "/glossaries")
+          .withSession(Security.username -> adminUsername)
+          .withJsonBody(Json.toJson(newGlossary))
+      ).get
+
+      status(glossariesPage) must equalTo(OK)
+
+      //glossary must be not saved
+      GlossaryService.getById(id) must beNone
+
+      //number of elements must remain the same
+      GlossaryService.count must beEqualTo(dbCount)
     }
 
     "logout page should redirect to login page" in new WithApplication {
