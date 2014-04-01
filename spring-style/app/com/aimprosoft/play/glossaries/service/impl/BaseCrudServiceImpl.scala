@@ -5,7 +5,7 @@ import org.springframework.data.domain.{PageRequest, Pageable, Page}
 import org.springframework.data.jpa.repository.JpaRepository
 import com.aimprosoft.play.glossaries.models.BusinessModel
 
-abstract class BaseCrudServiceImpl[T <: BusinessModel, P <: JpaRepository[T, BaseCrudService#ID]] extends BaseCrudService[T]{
+abstract class BaseCrudServiceImpl[T <: BusinessModel, P <: JpaRepository[T, java.lang.Long]] extends BaseCrudService[T]{
 
   protected val persistence: P
 
@@ -23,11 +23,11 @@ abstract class BaseCrudServiceImpl[T <: BusinessModel, P <: JpaRepository[T, Bas
     persistence.count()
   }
 
-  def exists(id: ID): Boolean = {
+  def exists(id: java.lang.Long): Boolean = {
     persistence.exists(id)
   }
 
-  def getById(id: ID): Option[T] = {
+  def getById(id: java.lang.Long): Option[T] = {
       Option(persistence.findOne(id))
   }
 
@@ -43,7 +43,7 @@ abstract class BaseCrudServiceImpl[T <: BusinessModel, P <: JpaRepository[T, Bas
       persistence.delete(entity)
   }
 
-  def removeById(id: ID): Unit = {
+  def removeById(id: java.lang.Long): Unit = {
       persistence.delete(id)
   }
 

@@ -8,15 +8,13 @@ import com.aimprosoft.play.glossaries.models.impl.{User, Glossary}
 @Transactional(readOnly = true)
 trait BaseCrudService[T <: BusinessModel] {
 
-  type ID = java.lang.Long
-
   def getCurrentPage(startRow: Int, pageSize: Int): Page[T]
 
-  def exists(id: ID): Boolean
+  def exists(id: java.lang.Long): Boolean
 
   def count: Long
 
-  def getById(id: ID): Option[T]
+  def getById(id: java.lang.Long): Option[T]
 
   @Transactional(readOnly = false)
   def add(entity: T): Unit
@@ -28,7 +26,7 @@ trait BaseCrudService[T <: BusinessModel] {
   def remove(entity: T): Unit
 
   @Transactional(readOnly = false)
-  def removeById(id: ID): Unit
+  def removeById(id: java.lang.Long): Unit
 
 }
 
