@@ -1,6 +1,5 @@
 package controllers
 
-import com.aimprosoft.play.glossaries.services.GlossaryService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import play.api.mvc.Controller

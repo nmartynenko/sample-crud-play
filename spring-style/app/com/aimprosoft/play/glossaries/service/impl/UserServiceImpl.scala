@@ -1,28 +1,28 @@
-package com.aimprosoft.play.glossaries.services.impl
+package com.aimprosoft.play.glossaries.service.impl
 
 import com.aimprosoft.play.glossaries.models.impl.User
 import com.aimprosoft.play.glossaries.persistence.UserPersistence
-import com.aimprosoft.play.glossaries.services.UserService
+import com.aimprosoft.play.glossaries.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.{NoOpPasswordEncoder, PasswordEncoder}
 import org.springframework.stereotype.Service
 
 @Service
-class UserServiceImpl extends UserService {
+class UserServiceImpl extends BaseCrudServiceImpl[User, UserPersistence] with UserService {
 
   @Autowired
-  private val userPersistence: UserPersistence = null
+  protected val persistence: UserPersistence = null
 
   @Autowired(required = false)
   private val passwordEncoder: PasswordEncoder = NoOpPasswordEncoder.getInstance
 
-  def addUser(user: User): Unit = {
+  override def add(user: User): Unit = {
     user.password = passwordEncoder.encode(user.password)
 
-    userPersistence.save(user)
+    super.add(user)
   }
 
-  def getUserByEmail(username: String): User = {
-    userPersistence.findByEmail(username)
+  def getByEmail(username: String): User = {
+    persistence.findByEmail(username)
   }
 }

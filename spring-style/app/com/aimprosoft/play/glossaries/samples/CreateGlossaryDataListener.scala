@@ -1,7 +1,7 @@
 package com.aimprosoft.play.glossaries.samples
 
 import com.aimprosoft.play.glossaries.models.impl.Glossary
-import com.aimprosoft.play.glossaries.persistence.GlossaryPersistence
+import com.aimprosoft.play.glossaries.service.GlossaryService
 import javax.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -40,26 +40,30 @@ class CreateGlossaryDataListener {
   }
 
   @Autowired
-  private val glossaryPersistence: GlossaryPersistence = null
+  private val glossaryService: GlossaryService = null
 
   @PostConstruct
   @throws[Exception]
   def init() {
-    Logger.info("Start adding sample glossaries")
+    //check whether data is present in DB
+    if (glossaryService.count == 0) {
 
-    val random = new Random()
+      Logger.info("Start adding sample glossaries")
 
-    for (i <- 0 until TITLES.length) {
+      val random = new Random()
 
-      val descIndex = random.nextInt(DESCRIPTIONS.length)
+      for (i <- 0 until TITLES.length) {
 
-      val glossary = new Glossary()
-      glossary.name = TITLES(i)
-      glossary.description = DESCRIPTIONS(descIndex)
+        val descIndex = random.nextInt(DESCRIPTIONS.length)
 
-      glossaryPersistence.save(glossary)
+        val glossary = new Glossary()
+        glossary.name = TITLES(i)
+        glossary.description = DESCRIPTIONS(descIndex)
+
+        glossaryService.add(glossary)
+      }
+
+      Logger.info("End adding sample glossaries")
     }
-
-    Logger.info("End adding sample glossaries")
   }
 }

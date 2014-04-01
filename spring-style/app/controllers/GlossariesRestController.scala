@@ -1,7 +1,7 @@
 package controllers
 
 import com.aimprosoft.play.glossaries.models.impl.Glossary
-import com.aimprosoft.play.glossaries.services.GlossaryService
+import com.aimprosoft.play.glossaries.service.GlossaryService
 import com.aimprosoft.play.glossaries.vo.GlossaryList
 import com.aimprosoft.scala.contrib.oval.ScalaOvalValidator
 import com.fasterxml.jackson.databind.ObjectReader
@@ -46,7 +46,7 @@ class GlossariesRestController extends BaseController with InitializingBean {
   }
 
   def getGlossary(id: Long) = Action {
-    val glossary = glossaryService.getGlossaryById(id)
+    val glossary = glossaryService.getById(id)
 
     val json = objectMapper.writeValueAsString(glossary)
 
@@ -55,17 +55,17 @@ class GlossariesRestController extends BaseController with InitializingBean {
 
   @PreAuthorize("hasAnyRole('ADMIN')")
   def removeGlossary(glossaryId: Long) = Action {
-    glossaryService.removeGlossaryById(glossaryId)
+    glossaryService.removeById(glossaryId)
 
     Ok
   }
 
   //treat input value as tolerant text
   @PreAuthorize("hasAnyRole('ADMIN')")
-  def saveGlossary() = saveUpdate {glossaryService.updateGlossary}
+  def saveGlossary() = saveUpdate {glossaryService.add}
 
   @PreAuthorize("hasAnyRole('ADMIN')")
-  def updateGlossary() = saveUpdate {glossaryService.updateGlossary}
+  def updateGlossary() = saveUpdate {glossaryService.update}
 
   //treat input value as tolerant text
   private def saveUpdate(action: Glossary => Unit) = Action(parse.tolerantText) {

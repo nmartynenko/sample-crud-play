@@ -2,7 +2,7 @@ package com.aimprosoft.play.glossaries.samples
 
 import com.aimprosoft.play.glossaries.models.UserRole
 import com.aimprosoft.play.glossaries.models.impl.User
-import com.aimprosoft.play.glossaries.services.UserService
+import com.aimprosoft.play.glossaries.service.UserService
 import javax.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -17,16 +17,19 @@ class CreateAdminListener {
   @PostConstruct
   @throws[Exception]
   def init() {
-    Logger.info("Start adding sample admin")
+    //check whether data is present in DB
+    if (userService.count == 0){
+      Logger.info("Start adding sample admin")
 
-    val user = new User()
-    user.email = "admin@example.com"
-    user.password = "admin"
-    user.name = "Sample Admin"
-    user.role = UserRole.ADMIN
+      val user = new User()
+      user.email = "admin@example.com"
+      user.password = "admin"
+      user.name = "Sample Admin"
+      user.role = UserRole.ADMIN
 
-    userService.addUser(user)
+      userService.add(user)
 
-    Logger.info("Sample admin has been added successfully")
+      Logger.info("Sample admin has been added successfully")
+    }
   }
 }

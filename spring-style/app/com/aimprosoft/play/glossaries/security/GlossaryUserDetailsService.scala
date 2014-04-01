@@ -3,7 +3,7 @@ package com.aimprosoft.play.glossaries.security
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.{UsernameNotFoundException, UserDetails, UserDetailsService}
-import com.aimprosoft.play.glossaries.services.UserService
+import com.aimprosoft.play.glossaries.service.UserService
 import com.aimprosoft.play.glossaries.models.impl.User
 import com.aimprosoft.play.glossaries.models.UserRole
 
@@ -15,7 +15,7 @@ class GlossaryUserDetailsService extends UserDetailsService {
   @throws[UsernameNotFoundException]
   def loadUserByUsername(username: String): UserDetails = {
 
-    val user = userService.getUserByEmail(username)
+    val user = userService.getByEmail(username)
 
     user match {
       case null =>
