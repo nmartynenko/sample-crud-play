@@ -1,4 +1,4 @@
-* cover with tests
+* cover with integration tests
 
 * implement advanced validation
 

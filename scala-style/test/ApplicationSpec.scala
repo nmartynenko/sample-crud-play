@@ -119,7 +119,8 @@ class ApplicationSpec extends Specification {
           Cache.get(username) must beSome(subject)
 
           val home = route(
-            FakeRequest(GET, "/index.html").withSession(Security.username -> username)
+            FakeRequest(GET, "/index.html")
+              .withSession(Security.username -> username)
           ).get
 
           status(home) must equalTo(OK)
@@ -138,7 +139,8 @@ class ApplicationSpec extends Specification {
           Cache.get(username) must beSome(subject)
 
           val glossariesPage = route(
-            FakeRequest(GET, "/glossaries").withSession(Security.username -> username)
+            FakeRequest(GET, "/glossaries")
+              .withSession(Security.username -> username)
           ).get
 
           status(glossariesPage) must equalTo(OK)
@@ -163,7 +165,8 @@ class ApplicationSpec extends Specification {
           val id = 1
 
           val glossariesPage = route(
-            FakeRequest(GET, s"/glossaries/$id").withSession(Security.username -> username)
+            FakeRequest(GET, s"/glossaries/$id")
+              .withSession(Security.username -> username)
           ).get
 
           status(glossariesPage) must equalTo(OK)
@@ -188,7 +191,8 @@ class ApplicationSpec extends Specification {
       GlossaryService.exists(id) must beTrue
 
       val glossariesPage = route(
-        FakeRequest(DELETE, s"/glossaries/$id").withSession(Security.username -> userUsername)
+        FakeRequest(DELETE, s"/glossaries/$id")
+          .withSession(Security.username -> userUsername)
       ).get
 
       status(glossariesPage) must equalTo(FORBIDDEN)
@@ -210,7 +214,8 @@ class ApplicationSpec extends Specification {
       GlossaryService.exists(id) must beTrue
 
       val glossariesPage = route(
-        FakeRequest(DELETE, s"/glossaries/$id").withSession(Security.username -> adminUsername)
+        FakeRequest(DELETE, s"/glossaries/$id")
+          .withSession(Security.username -> adminUsername)
       ).get
 
       status(glossariesPage) must equalTo(OK)
@@ -408,9 +413,8 @@ class ApplicationSpec extends Specification {
           Cache.get(username) must beSome(subject)
 
           val logoutUrl = route(
-            FakeRequest(GET, "/logout").withSession(Security.username -> username)
-              //for POST/PUT requests, for others it's ignored either way
-              .withJsonBody(JsObject(List()))
+            FakeRequest(GET, "/logout")
+              .withSession(Security.username -> username)
           ).get
 
           status(logoutUrl) must equalTo(SEE_OTHER)
