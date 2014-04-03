@@ -10,9 +10,11 @@ import play.api.mvc.{Action, Handler, RequestHeader, SimpleResult}
 import scala.concurrent.Future
 
 object SpringAwareGlobalSetting extends GlobalSettings
-  with ControllerAdviceProcessor with SecurityInterceptor {
+  with ControllerAdviceProcessor with SecurityInterceptor with ObjectFactory{
 
   private var ctx: AbstractApplicationContext = _
+
+  def unsafeContext: AbstractApplicationContext = ctx
 
   override def onStart(app: Application) {
     Logger.info("Initialize Spring context for Play application")
