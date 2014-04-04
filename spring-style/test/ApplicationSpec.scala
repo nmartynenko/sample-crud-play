@@ -1,4 +1,7 @@
+import com.aimprosoft.play.glossaries.models.impl.Glossary
 import com.aimprosoft.play.glossaries.security.GlossaryUserDetailsService
+import com.aimprosoft.play.glossaries.SpringAwareGlobalSetting
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.runner._
 import org.specs2.mutable._
 import org.specs2.runner._
@@ -112,7 +115,7 @@ class ApplicationSpec extends Specification {
 
       forAllUsers {
         (username, auth) =>
-        //make sure that cache has actual data
+          //make sure that cache has actual data
           Cache.get(username) must beSome(auth)
 
           val home = route(
@@ -126,12 +129,16 @@ class ApplicationSpec extends Specification {
     }
 
     "return all glossaries for all users" in new WithApplication {
+      val objectMapper = SpringAwareGlobalSetting.getBean(classOf[ObjectMapper])
+
+      Option(objectMapper) must beSome
+
       //be authenticated
       authenticateAllUsers
 
       forAllUsers {
         (username, auth) =>
-        //make sure that cache has actual data
+          //make sure that cache has actual data
           Cache.get(username) must beSome(auth)
 
           val glossariesPage = route(
@@ -141,20 +148,25 @@ class ApplicationSpec extends Specification {
           status(glossariesPage) must equalTo(OK)
           contentType(glossariesPage) must beSome.which(_ == "application/json")
 
-//          val response = contentAsJson(glossariesPage).
-//            as[GlossaryPageResponse]
-//          //there is no pagination
-//          response.content must haveLength(response.totalElements)
+          val response = contentAsString(glossariesPage)
+
+//          val page = objectMapper.readValue(response, classOf[GlossaryList]).page
+//          there is no pagination
+//          page.getContent must haveLength(page.getTotalElements.toInt)
       }
     }
 
     "return particular glossary for all users" in new WithApplication {
+      val objectMapper = SpringAwareGlobalSetting.getBean(classOf[ObjectMapper])
+
+      Option(objectMapper) must beSome
+
       //be authenticated
       authenticateAllUsers
 
       forAllUsers {
         (username, auth) =>
-        //make sure that cache has actual data
+          //make sure that cache has actual data
           Cache.get(username) must beSome(auth)
 
           val id = 1
@@ -166,9 +178,11 @@ class ApplicationSpec extends Specification {
           status(glossariesPage) must equalTo(OK)
           contentType(glossariesPage) must beSome.which(_ == "application/json")
 
-//          val response = contentAsJson(glossariesPage).as[Glossary]
+          val response = contentAsString(glossariesPage)
 
-//          response.id must beSome.which(_ == id)
+          val glossary = objectMapper.readValue(response, classOf[Glossary])
+
+          glossary.id must beEqualTo(id)
       }
     }
 
@@ -178,7 +192,7 @@ class ApplicationSpec extends Specification {
 
       forAllUsers {
         (username, auth) =>
-        //make sure that cache has actual data
+          //make sure that cache has actual data
           Cache.get(username) must beSome(auth)
 
           val logoutUrl = route(
