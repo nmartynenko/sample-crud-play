@@ -6,7 +6,7 @@ import scala.beans.BeanProperty
 
 @Entity
 @Table(name = "glossary_user")
-class User extends BusinessModel {
+class User extends BusinessModel with Cloneable{
 
   @BeanProperty
   //hibernate
@@ -44,4 +44,6 @@ class User extends BusinessModel {
     val state = Seq(email, password, name, role)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+  override def clone(): AnyRef = super.clone()
 }

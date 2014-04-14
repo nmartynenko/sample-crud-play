@@ -7,7 +7,7 @@ import scala.beans.BeanProperty
 
 @Entity
 @Table(name = "glossary")
-class Glossary extends BusinessModel {
+class Glossary extends BusinessModel with Cloneable{
 
   @BeanProperty
   //validation
@@ -18,9 +18,6 @@ class Glossary extends BusinessModel {
   var name: String = _
 
   @BeanProperty
-  //validation
-  @NotNull(message = "sample.error.not.null")
-  @NotEmpty(message = "sample.error.not.empty")
   //hibernate
   @Lob
   @Column(name = "description", nullable = true, length = 4096)
@@ -40,4 +37,6 @@ class Glossary extends BusinessModel {
     val state = Seq(name, description)
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
+
+  override def clone(): AnyRef = super.clone()
 }

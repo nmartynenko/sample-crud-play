@@ -1,4 +1,4 @@
-* cover with tests
+* improve spring support for tests
 
 * finish security for services methods (implicit conversions? additional method executors?)
 
