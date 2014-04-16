@@ -1,9 +1,14 @@
-@()(implicit lang: Lang)
+@()(implicit request: Request[_], lang: Lang)
+
+@import com.aimprosoft.play.glossaries.security.GlossaryUserDetails
+@import com.aimprosoft.play.glossaries.tags.views.TemplateUtils._
+@import com.aimprosoft.play.glossaries.tags.views.html.hasRole
+@import com.aimprosoft.play.glossaries.models.UserRole
 <body>
     <div id="header">
         <div>
             <span class="userGreeting">
-                @Messages("sample.message.welcome")&nbsp;TODO
+                @Messages("sample.message.welcome")&nbsp;@{principal[GlossaryUserDetails].get.getUser.getName}
             </span>
             <a href="/logout">@Messages("sample.message.logout")</a>
         </div>
@@ -26,19 +31,19 @@
                     <th>@Messages("sample.message.id")</th>
                     <th>@Messages("sample.message.name")</th>
                     <th>@Messages("sample.message.description")</th>
-                    @*<security:authorize access="hasRole('ADMIN')">*@
+                    @hasRole(UserRole.ADMIN) {
                         <th>@Messages("sample.message.actions")</th>
-                    @*</security:authorize>*@
+                    }
                 </tr>
             </thead>
             <tbody></tbody>
         </table>
 
-        @*<security:authorize access="hasRole('ADMIN')">*@
+        @hasRole(UserRole.ADMIN) {
             <div>
                 <input type="button" value="@Messages("sample.message.add")" class="edit" data-id="0">
             </div>
-        @*</security:authorize>*@
+        }
 
     </div>
 

@@ -8,6 +8,7 @@ import play.api.cache.Cache
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.mvc._
+import org.springframework.security.core.context.SecurityContextHolder
 
 @MVCController
 class LoginController extends BaseController{

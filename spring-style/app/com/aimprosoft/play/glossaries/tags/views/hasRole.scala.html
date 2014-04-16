@@ -1,0 +1,5 @@
+@(roles: com.aimprosoft.play.glossaries.models.UserRole*)(body: => Html)(implicit request: Request[_])
+
+@if(com.aimprosoft.play.glossaries.tags.SpringSecurityViewSupport.hasRole(roles: _*)){
+    @body
+}

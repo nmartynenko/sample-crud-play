@@ -1,4 +1,8 @@
-@()(implicit lang: Lang)
+@()(implicit request: Request[_], lang: Lang)
+
+@import com.aimprosoft.play.glossaries.tags.views.html._
+@import com.aimprosoft.play.glossaries.models.UserRole
+
 <head>
     <title>@Messages("sample.message.index.title")</title>
 
@@ -29,7 +33,7 @@
             var mRenderFn = Handlebars.compile($("#editLink" ).html());
 
             //setup locales
-            Globalize.addCultureInfo ("en", {
+            Globalize.addCultureInfo ("@lang.language", {
                 messages : {
                     "sample.js.message.confirm.deleting" : "@Messages("sample.js.message.confirm.deleting")",
                     "sample.js.error.delete" : "@Messages("sample.js.error.delete")",
@@ -57,7 +61,7 @@
                         { mData: "id" ,bSortable: false},
                         { mData: "name", bSortable: false },
                         { mData: "description", bSortable: false }
-//                        <security:authorize access="hasRole('ADMIN')">
+                        @hasRole(UserRole.ADMIN) {
                         //edit links (only for admins)
                         ,{
                             mData: "id",
@@ -68,7 +72,7 @@
                                 });
                             }
                         }
-//                        </security:authorize>
+                        }
                     ],
                     aLengthMenu: [2, 3, 5]
                 }
