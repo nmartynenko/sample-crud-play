@@ -18,7 +18,7 @@ class CreateUserListener {
   @throws[Exception]
   def init() {
     //check whether data is present in DB
-    if (userService.count == 0) {
+    if (userService.countByRole(UserRole.USER) == 0) {
       Logger.info("Start adding sample user")
 
       val user = new User()

@@ -1,6 +1,6 @@
 package com.aimprosoft.play.glossaries.service
 
-import com.aimprosoft.play.glossaries.models.BusinessModel
+import com.aimprosoft.play.glossaries.models.{UserRole, BusinessModel}
 import org.springframework.data.domain.Page
 import org.springframework.transaction.annotation.Transactional
 import com.aimprosoft.play.glossaries.models.impl.{User, Glossary}
@@ -36,5 +36,7 @@ trait GlossaryService extends BaseCrudService[Glossary]
 trait UserService extends BaseCrudService[User]{
 
   def getByEmail(username: String): User
+
+  def countByRole(role: UserRole): Long
 
 }

@@ -6,6 +6,7 @@ import com.aimprosoft.play.glossaries.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.{NoOpPasswordEncoder, PasswordEncoder}
 import org.springframework.stereotype.Service
+import com.aimprosoft.play.glossaries.models.UserRole
 
 @Service
 class UserServiceImpl extends BaseCrudServiceImpl[User, UserPersistence] with UserService {
@@ -24,5 +25,9 @@ class UserServiceImpl extends BaseCrudServiceImpl[User, UserPersistence] with Us
 
   def getByEmail(username: String): User = {
     persistence.findByEmail(username)
+  }
+
+  override def countByRole(role: UserRole): Long = {
+    persistence.countByRole(role)
   }
 }

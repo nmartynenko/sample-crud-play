@@ -16,7 +16,7 @@ class GlossaryAuthenticationService {
 
   def authenticate(username: String, password: String): Option[Authentication] = {
     try {
-      Some(authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(username, password)))
+      Option(authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(username, password)))
     }
     catch {
       case _ : AuthenticationException => None

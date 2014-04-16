@@ -53,6 +53,11 @@ class SlickUsersPersistence extends SlickBasePersistence[User, Long, SlickUsers]
   def findByEmail(email: String)(implicit session: Session): Option[User] = {
     tableQuery.filter(_.email === email).firstOption
   }
+
+  def countByRole(role: String)(implicit session: Session): Long = {
+    tableQuery.filter(_.role === role).length.run
+  }
+
 }
 
 class SlickGlossariesPersistence extends SlickBasePersistence[Glossary, Long, SlickGlossaries]

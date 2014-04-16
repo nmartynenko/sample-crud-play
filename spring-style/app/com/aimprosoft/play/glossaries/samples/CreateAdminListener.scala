@@ -18,7 +18,7 @@ class CreateAdminListener {
   @throws[Exception]
   def init() {
     //check whether data is present in DB
-    if (userService.count == 0){
+    if (userService.countByRole(UserRole.ADMIN) == 0){
       Logger.info("Start adding sample admin")
 
       val user = new User()

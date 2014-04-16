@@ -1,13 +1,14 @@
 package com.aimprosoft.play.glossaries.service.impl
 
+import be.objectify.deadbolt.core.models.Role
 import com.aimprosoft.play.glossaries.domain.PageResponse
 import com.aimprosoft.play.glossaries.models.{User, Glossary}
 import com.aimprosoft.play.glossaries.persistence._
 import com.aimprosoft.play.glossaries.service._
+import org.mindrot.jbcrypt.BCrypt
 import play.api.Play.current
 import play.api.db.slick._
 import scala.language.reflectiveCalls
-import org.mindrot.jbcrypt.BCrypt
 
 trait SlickTransactional {
 
@@ -110,4 +111,8 @@ class UserServiceImpl extends UserService
       UserPersistence.findByEmail(email)
   }
 
+  override def countByRole(role: Role): Long = readOnly {
+    implicit session: Session =>
+      UserPersistence.countByRole(role.getName)
+  }
 }
