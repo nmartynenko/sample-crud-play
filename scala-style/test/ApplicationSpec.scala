@@ -27,7 +27,9 @@ class ApplicationSpec extends Specification {
   "Application" should {
 
     "redirect from / into index.html" in new WithApplication {
-      var rootRoute = route(FakeRequest(GET, "/")).get
+      var rootRoute = route(
+        FakeRequest(GET, "/")
+      ).get
 
       status(rootRoute) must equalTo(SEE_OTHER)
       headers(rootRoute) must havePair(HeaderNames.LOCATION -> "/index.html")
@@ -44,8 +46,6 @@ class ApplicationSpec extends Specification {
     "show login page" in new WithApplication{
       val loginUrl = route(
         FakeRequest(GET, "/login.html")
-          //for POST/PUT requests, for others it's ignored either way
-          .withJsonBody(JsObject(List()))
       ).get
 
       status(loginUrl) must equalTo(OK)

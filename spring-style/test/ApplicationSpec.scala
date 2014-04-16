@@ -26,7 +26,9 @@ class ApplicationSpec extends Specification {
   "Application" should {
 
     "redirect from / into login.html" in new WithApplication {
-      var rootRoute = route(FakeRequest(GET, "/")).get
+      var rootRoute = route(
+        FakeRequest(GET, "/")
+      ).get
 
       status(rootRoute) must equalTo(SEE_OTHER)
       headers(rootRoute) must havePair(HeaderNames.LOCATION -> "/login.html")
@@ -43,8 +45,6 @@ class ApplicationSpec extends Specification {
     "show login page" in new WithApplication{
       val loginUrl = route(
         FakeRequest(GET, "/login.html")
-          //for POST/PUT requests, for others it's ignored either way
-          .withJsonBody(JsObject(List()))
       ).get
 
       status(loginUrl) must equalTo(OK)
@@ -144,7 +144,8 @@ class ApplicationSpec extends Specification {
           Cache.get(username) must beSome(auth)
 
           val glossariesPage = route(
-            FakeRequest(GET, "/glossaries").withSession(Security.username -> username)
+            FakeRequest(GET, "/glossaries")
+              .withSession(Security.username -> username)
           ).get
 
           status(glossariesPage) must equalTo(OK)

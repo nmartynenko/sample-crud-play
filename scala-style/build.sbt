@@ -14,9 +14,11 @@ resolvers += Resolver.url("Objectify Play Repository", url("http://schaloner.git
 
 resolvers += Resolver.url("Objectify Play Snapshot Repository", url("http://schaloner.github.io/snapshots/"))(Resolver.ivyStylePatterns)
 
-//scala's compiler and runtime settings
+//Scala's compiler and runtime settings
 
 scalaVersion := "2.10.4"
+
+scalaBinaryVersion := "2.10"
 
 scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation")
 

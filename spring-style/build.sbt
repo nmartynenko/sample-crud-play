@@ -1,19 +1,31 @@
 import play.Project._
 
+//project settings
+
 name := "sample-crud-play-spring-style"
 
-version := "1.0"
+version := "1.1"
 
-scalaVersion := "2.10.4"
-
-scalacOptions ++= Seq(
-  "-feature"
-)
+//dependencies resolvers
 
 resolvers ++= Seq(
   "Sonatype" at "http://search.maven.org/remotecontent?filepath=",
   "Spring milestones" at "https://repo.springsource.org/libs-milestone"
 )
+
+//Scala's compiler and runtime settings
+
+scalaVersion := "2.10.4"
+
+scalaBinaryVersion := "2.10"
+
+scalacOptions ++= Seq(
+  "-feature",
+  "-unchecked",
+  "-deprecation"
+)
+
+//dependencies settings
 
 libraryDependencies ++= Seq(
   //test dependencies
@@ -42,5 +54,7 @@ libraryDependencies ++= Seq(
   jdbc,
   cache
 )
+
+//apply plugin settings
 
 playScalaSettings
