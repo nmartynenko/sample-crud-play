@@ -1,10 +1,10 @@
-@(lang: Lang, handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[_])
+@(handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[_], lang: Lang)
 
 @import be.objectify.deadbolt.scala.views.html._
 @import be.objectify.deadbolt.core.utils.TemplateUtils._
 
 <head>
-    <title>@Messages("sample.message.index.title")(lang)</title>
+    <title>@Messages("sample.message.index.title")</title>
 
     <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
 
@@ -23,9 +23,9 @@
     <script type="text/javascript" src="@routes.Assets.at("javascripts/handlebars.js")"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
 
-    @actions(lang, handler)
+    @actions(handler)
 
-    @edit(lang, handler)
+    @edit(handler)
 
     <script type="text/javascript">
         jQuery(document).ready(function($){
@@ -35,10 +35,10 @@
             //setup locales
             Globalize.addCultureInfo ("en", {
                 messages : {
-                    "sample.js.message.confirm.deleting" : "@Messages("sample.js.message.confirm.deleting")(lang)",
-                    "sample.js.error.delete" : "@Messages("sample.js.error.delete")(lang)",
-                    "sample.js.error.retrieve" : "@Messages("sample.js.error.retrieve")(lang)",
-                    "sample.js.error.update" : "@Messages("sample.js.error.update")(lang)"
+                    "sample.js.message.confirm.deleting" : "@Messages("sample.js.message.confirm.deleting")",
+                    "sample.js.error.delete" : "@Messages("sample.js.error.delete")",
+                    "sample.js.error.retrieve" : "@Messages("sample.js.error.retrieve")",
+                    "sample.js.error.update" : "@Messages("sample.js.error.update")"
                 }
             });
 

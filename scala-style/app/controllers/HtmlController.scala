@@ -13,7 +13,7 @@ object HtmlController extends SecuredController {
       implicit val language = Lang(lang)
 
       Ok(
-        views.html.index(language, SubjectPresentGlossaryUserDeadboltHandler)
+        views.html.index(SubjectPresentGlossaryUserDeadboltHandler)
       )
     }
   }

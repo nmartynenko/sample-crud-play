@@ -1,8 +1,8 @@
-@(lang: Lang, handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[_])
+@(handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[_], lang: Lang)
 <!DOCTYPE html>
 
 <html>
-    @header(lang, handler)
+    @header(handler)
 
-    @body(lang, handler)
+    @body(handler)
 </html>

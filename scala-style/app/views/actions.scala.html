@@ -1,10 +1,10 @@
-@(lang: Lang, handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[_])
+@(handler: be.objectify.deadbolt.scala.DeadboltHandler)(implicit request: Request[_], lang: Lang)
 @*Template for CRUD links*@
 <script type="text/x-handlebars-template" id="editLink">
     <a href='#' class="edit" data-id='{{data}}'>
-    @Messages("sample.message.edit")(lang)
+    @Messages("sample.message.edit")
     </a>
     <a href='#' class="remove" data-id='{{data}}'>
-    @Messages("sample.message.delete")(lang)
+    @Messages("sample.message.delete")
     </a>
 </script>
