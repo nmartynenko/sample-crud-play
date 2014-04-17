@@ -7,11 +7,9 @@ import play.api.mvc.RequestHeader
 trait SecurityInterceptor {
 
   def setAuth(implicit request: RequestHeader): Unit = {
-    PlaySecurityHolder.getAuthentication match {
-      case Some(auth) =>
+    PlaySecurityHolder.getAuthentication foreach {
+      auth =>
         SecurityContextHolder.getContext.setAuthentication(auth)
-      case _ =>
-        SecurityContextHolder.clearContext()
     }
   }
 

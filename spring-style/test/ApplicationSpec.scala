@@ -1,6 +1,6 @@
 import com.aimprosoft.play.glossaries.SpringAwareGlobalSetting
-import com.aimprosoft.play.glossaries.models.impl.Glossary
-import com.aimprosoft.play.glossaries.security.GlossaryUserDetailsService
+import com.aimprosoft.play.glossaries.models.impl.{User, Glossary}
+import com.aimprosoft.play.glossaries.security.{GlossaryUserDetails, GlossaryUserDetailsService}
 import com.aimprosoft.play.glossaries.service.GlossaryService
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.runner._
@@ -8,6 +8,7 @@ import org.specs2.mutable._
 import org.specs2.runner._
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UserDetails
 import play.api.cache.Cache
 import play.api.http.{MimeTypes, HeaderNames}
 import play.api.libs.json.JsObject
@@ -84,19 +85,32 @@ class ApplicationSpec extends Specification {
   }
 
   "Application for authenticated users" should {
-    import scala.collection.JavaConversions._
-
+    //security details for admin user
     val adminUsername: String = "fakeAdmin"
-    val adminAuth: Authentication = new UsernamePasswordAuthenticationToken(
+    val adminDetails: GlossaryUserDetails = new GlossaryUserDetails(
       adminUsername, "", GlossaryUserDetailsService.ADMIN_AUTHORITIES
     )
+    adminDetails.user = new User
+    adminDetails.user.name = adminUsername
+    val adminAuth: Authentication = new UsernamePasswordAuthenticationToken(
+      adminDetails, adminDetails.getPassword, adminDetails.getAuthorities
+    )
+
+    //security details for regular user
     val userUsername: String = "fakeUser"
-    val userAuth: Authentication = new UsernamePasswordAuthenticationToken(
+    val userDetails: GlossaryUserDetails = new GlossaryUserDetails(
       userUsername, "", GlossaryUserDetailsService.USER_AUTHORITIES
     )
-    val users: Seq[(String, Authentication)] = Seq(
-      (adminUsername, adminAuth),
-      (userUsername, userAuth)
+    userDetails.user = new User
+    userDetails.user.name = userUsername
+    val userAuth: Authentication = new UsernamePasswordAuthenticationToken(
+      userDetails, userDetails.getPassword, userDetails.getAuthorities
+    )
+
+    //all users
+    val users: Map[String, Authentication] = Map(
+      adminUsername -> adminAuth,
+      userUsername -> userAuth
     )
 
     def forAllUsers(f: => (String, Authentication) => Unit): Unit = {

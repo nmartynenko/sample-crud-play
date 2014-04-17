@@ -4,6 +4,7 @@ import org.springframework.beans.factory.BeanFactoryUtils
 import org.springframework.context.support._
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.AuthenticationException
+import org.springframework.security.core.context.SecurityContextHolder
 import play.api._
 import play.api.mvc.Results._
 import play.api.mvc.{Action, Handler, RequestHeader, SimpleResult}
@@ -64,9 +65,15 @@ object SpringAwareGlobalSetting extends GlobalSettings
   }
 
   override def onRouteRequest(request: RequestHeader): Option[Handler] = {
-    //ignore static assets
-    if (!(request.path startsWith "/assets")){
-      setAuth(request)
+    request.path match {
+      //clear context for logout page
+      case p if p.startsWith("/logout") =>
+        SecurityContextHolder.clearContext()
+      //ignore static assets
+      case p if !p.startsWith("/assets") =>
+        setAuth(request)
+      //do nothing otherwise
+      case _ => ()
     }
 
     try {
