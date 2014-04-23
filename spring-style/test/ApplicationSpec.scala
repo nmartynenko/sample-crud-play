@@ -8,7 +8,6 @@ import org.specs2.mutable._
 import org.specs2.runner._
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.userdetails.UserDetails
 import play.api.cache.Cache
 import play.api.http.{MimeTypes, HeaderNames}
 import play.api.libs.json.JsObject

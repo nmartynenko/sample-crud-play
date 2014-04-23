@@ -39,15 +39,15 @@ libraryDependencies ++= Seq(
   "org.springframework" % "spring-orm" % "4.0.3.RELEASE",
   "org.springframework" % "spring-webmvc" % "4.0.3.RELEASE",
   "org.springframework.security" % "spring-security-config" % "3.2.3.RELEASE",
-  "org.springframework.data" % "spring-data-jpa" % "1.5.1.RELEASE",
+  "org.springframework.data" % "spring-data-jpa" % "1.5.2.RELEASE",
   "org.springframework.scala" %% "spring-scala" % "1.0.0.RC1",
   //hibernate dependencies
-  "org.hibernate" % "hibernate-core" % "4.3.4.Final",
-  "org.hibernate" % "hibernate-ehcache" % "4.3.4.Final",
-  "org.hibernate" % "hibernate-entitymanager" % "4.3.4.Final",
+  "org.hibernate" % "hibernate-core" % "4.3.5.Final",
+  "org.hibernate" % "hibernate-ehcache" % "4.3.5.Final",
+  "org.hibernate" % "hibernate-entitymanager" % "4.3.5.Final",
   "org.hsqldb" % "hsqldb" % "2.3.2",
   //jackson
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.3.2",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.3.3",
   //validation
   "net.sf.oval" % "oval" % "1.84",
   //enable JDBC module for the project
