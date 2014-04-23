@@ -1,7 +1,7 @@
 language: scala
 scala:
 - 2.10.2
-sript:
+sсript:
 - sbt test
 sbt_args:
 - -J-XX:+CMSClassUnloadingEnabled
