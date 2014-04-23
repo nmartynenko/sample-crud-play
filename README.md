@@ -1,4 +1,4 @@
-## Sample CRUD application ##
+## Sample CRUD application [![Build Status](https://travis-ci.org/nmartynenko/sample-crud-play.png?branch=master)](https://travis-ci.org/nmartynenko/sample-crud-play)
 
 This is sample Play framework application, which is represented as:
 
