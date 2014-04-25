@@ -13,9 +13,9 @@ import scala.concurrent.Future
 object SpringAwareGlobalSetting extends GlobalSettings
   with ControllerAdviceProcessor with SecurityInterceptor with ObjectFactory{
 
-  private var ctx: AbstractApplicationContext = _
+  private var ctx: PlaySpringContext = _
 
-  def unsafeContext: AbstractApplicationContext = ctx
+  def unsafeContext: PlaySpringContext = ctx
 
   override def onStart(app: Application) {
     Logger.info("Initialize Spring context for Play application")
