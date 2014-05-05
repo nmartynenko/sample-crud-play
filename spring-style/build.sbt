@@ -4,7 +4,7 @@ import play.Project._
 
 name := "sample-crud-play-spring-style"
 
-version := "1.1"
+version := "1.2"
 
 //dependencies resolvers
 
@@ -31,13 +31,13 @@ libraryDependencies ++= Seq(
   //test dependencies
   "junit" % "junit" % "4.11" % "test",
   "com.jayway.jsonpath" % "json-path" % "0.9.1" % "test",
-  "org.springframework" % "spring-test" % "4.0.3.RELEASE" % "test",
+  "org.springframework" % "spring-test" % "4.0.4.RELEASE" % "test",
   //runtime dependencies
   //Spring dependencies
-  "org.springframework" % "spring-aop" % "4.0.3.RELEASE",
-  "org.springframework" % "spring-context-support" % "4.0.3.RELEASE",
-  "org.springframework" % "spring-orm" % "4.0.3.RELEASE",
-  "org.springframework" % "spring-webmvc" % "4.0.3.RELEASE",
+  "org.springframework" % "spring-aop" % "4.0.4.RELEASE",
+  "org.springframework" % "spring-context-support" % "4.0.4.RELEASE",
+  "org.springframework" % "spring-orm" % "4.0.4.RELEASE",
+  "org.springframework" % "spring-webmvc" % "4.0.4.RELEASE",
   "org.springframework.security" % "spring-security-config" % "3.2.3.RELEASE",
   "org.springframework.data" % "spring-data-jpa" % "1.5.2.RELEASE",
   "org.springframework.scala" %% "spring-scala" % "1.0.0.RC1",

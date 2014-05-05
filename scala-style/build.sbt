@@ -4,7 +4,7 @@ import play.Project._
 
 name := "sample-crud-play-scala-style"
 
-version := "1.1"
+version := "1.2"
 
 //dependencies resolvers
 

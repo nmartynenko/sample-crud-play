@@ -1,6 +1,7 @@
 language: scala
+jdk:
+- oraclejdk6
+- oraclejdk7
 scala:
-- 2.10.0
-- 2.10.2
 - 2.10.4
 sbt_args: -J-XX:+CMSClassUnloadingEnabled
