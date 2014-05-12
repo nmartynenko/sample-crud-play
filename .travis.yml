@@ -4,4 +4,4 @@ jdk:
 - oraclejdk8
 scala:
 - 2.10.4
-sbt_args: -J-XX:+CMSClassUnloadingEnabled
+sbt_args: -J-XX:+CMSClassUnloadingEnabled -J-XX:+UseConcMarkSweepGC
