@@ -8,7 +8,7 @@ import scala.concurrent.Future
 //set of responses for Play's global error handling
 object ErrorResponses {
 
-  def handleException(ex: Exception, request: RequestHeader): Future[SimpleResult] = {
+  def handleException(ex: Exception, request: RequestHeader): Future[Result] = {
     Logger.error(ex.getMessage, ex)
 
     Future.successful(InternalServerError(ex.getMessage))

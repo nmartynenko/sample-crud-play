@@ -22,11 +22,11 @@ object Global extends GlobalSettings{
     Logger.info("Initialization has ended")
   }
 
-  override def onHandlerNotFound(request: RequestHeader): Future[SimpleResult] = {
+  override def onHandlerNotFound(request: RequestHeader): Future[Result] = {
     Future.successful(NotFound(views.html.page404()))
   }
 
-  override def onError(request: RequestHeader, ex: Throwable): Future[SimpleResult] = {
+  override def onError(request: RequestHeader, ex: Throwable): Future[Result] = {
 
     //onError original exceptions are always wrapped with Play ones
     ex.getCause match {

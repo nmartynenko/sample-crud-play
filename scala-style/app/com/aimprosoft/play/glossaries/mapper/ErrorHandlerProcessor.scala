@@ -8,11 +8,11 @@ import play.api.mvc._
 import scala.concurrent.Future
 
 trait ErrorHandler[-T <: Throwable] {
-  def handleError(ex: T, request: RequestHeader): Option[SimpleResult]
+  def handleError(ex: T, request: RequestHeader): Option[Result]
 }
 
 class SimpleErrorHandler extends ErrorHandler[Exception]{
-  def handleError(ex: Exception, request: RequestHeader): Option[SimpleResult] = {
+  def handleError(ex: Exception, request: RequestHeader): Option[Result] = {
     Logger.error(ex.getMessage, ex)
 
     Some(InternalServerError(ex.getMessage))
@@ -20,7 +20,7 @@ class SimpleErrorHandler extends ErrorHandler[Exception]{
 }
 
 class NoGlossaryFoundErrorHandler extends ErrorHandler[NoGlossaryFoundException]{
-  def handleError(ex: NoGlossaryFoundException, request: RequestHeader): Option[SimpleResult] = {
+  def handleError(ex: NoGlossaryFoundException, request: RequestHeader): Option[Result] = {
     Some(BadRequest(Messages("sample.error.glossary.not.found", ex.modelId)))
   }
 }
@@ -40,7 +40,7 @@ object ErrorHandlerProcessor {
     classOf[Exception] -> new SimpleErrorHandler
   )
 
-  def handleError(ex: Throwable, request: RequestHeader): Option[Future[SimpleResult]] = {
+  def handleError(ex: Throwable, request: RequestHeader): Option[Future[Result]] = {
     def findMatch(matchClass: Class[_ <: Throwable]): Option[ErrorHandler[_ <: Throwable]] = {
       exceptionHandlers.get(matchClass) match {
         case ret @ Some(_) =>

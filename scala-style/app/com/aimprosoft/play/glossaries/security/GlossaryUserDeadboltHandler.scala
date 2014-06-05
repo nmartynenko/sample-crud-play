@@ -6,12 +6,12 @@ import play.api.Logger
 import play.api.Play.current
 import play.api.cache.Cache
 import play.api.mvc.Results._
-import play.api.mvc.{Security, SimpleResult, Request}
+import play.api.mvc.{Result, Security, Request}
 import scala.concurrent.Future
 
 trait GlossaryUserDeadboltHandler extends DeadboltHandler {
 
-  protected val redirect: SimpleResult
+  protected val redirect: Result
 
   protected val handlerOption = Some(GlossaryDynamicResourceHandler)
 
@@ -29,7 +29,7 @@ trait GlossaryUserDeadboltHandler extends DeadboltHandler {
     }
   }
 
-  def onAuthFailure[A](request: Request[A]): Future[SimpleResult] = Future.successful {
+  def onAuthFailure[A](request: Request[A]): Future[Result] = Future.successful {
     Forbidden
   }
 
@@ -40,9 +40,9 @@ trait GlossaryUserDeadboltHandler extends DeadboltHandler {
 
 object SubjectPresentGlossaryUserDeadboltHandler extends GlossaryUserDeadboltHandler{
 
-  protected val redirect: SimpleResult = Redirect("/login.html")
+  protected val redirect: Result = Redirect("/login.html")
 
-  def beforeAuthCheck[A](request: Request[A]): Option[Future[SimpleResult]] = {
+  def beforeAuthCheck[A](request: Request[A]): Option[Future[Result]] = {
     getSubject(request) match {
       case None =>
         //redirect to login page if there is no subject
@@ -56,9 +56,9 @@ object SubjectPresentGlossaryUserDeadboltHandler extends GlossaryUserDeadboltHan
 
 object SubjectNotPresentGlossaryUserDeadboltHandler extends GlossaryUserDeadboltHandler{
 
-  protected val redirect: SimpleResult = Redirect("/index.html")
+  protected val redirect: Result = Redirect("/index.html")
 
-  def beforeAuthCheck[A](request: Request[A]): Option[Future[SimpleResult]] = {
+  def beforeAuthCheck[A](request: Request[A]): Option[Future[Result]] = {
     getSubject(request) match {
       case None =>
         None

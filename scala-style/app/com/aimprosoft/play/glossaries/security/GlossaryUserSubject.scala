@@ -23,6 +23,6 @@ class GlossaryUserSubject(val user: User) extends Subject with Serializable{
 
 object GlossaryUserSubject{
   def generateIdentifier(username: String): String = {
-    DigestUtils.shaHex(app.hashCode() + username)
+    DigestUtils.sha256Hex(app.hashCode() + username)
   }
 }
