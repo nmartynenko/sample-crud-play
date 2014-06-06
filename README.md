@@ -1,4 +1,4 @@
-## Sample CRUD application [![Build Status](https://travis-ci.org/nmartynenko/sample-crud-play.png?branch=master)](https://travis-ci.org/nmartynenko/sample-crud-play)
+## Sample CRUD application ###
 
 This is sample Play framework application, which is represented as:
 
@@ -13,9 +13,9 @@ The major difference from the original is that all back-end is written with [Pla
 
 In order to "feel" the Play, there are 2 alternative implementations:
 
-- with Play stack only &mdash; [scala-style](scala-style);
+- with Play stack only &mdash; [scala-style](https://github.com/nmartynenko/play-scala-style);
 
-- with Spring stack &mdash; [spring-style](spring-style);
+- with Spring stack &mdash; [spring-style](https://github.com/nmartynenko/play-spring-style);
 
 ####Play stack####
 It doesn't have any IoC/DI containers, as well as any "JavaEE-specific" frameworks.

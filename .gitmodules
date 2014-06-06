@@ -1,0 +1,6 @@
+[submodule "play-scala-style"]
+    path = play-scala-style
+    url = git@github.com:nmartynenko/play-scala-style.git
+[submodule "play-spring-style"]
+    path = play-spring-style
+    url = git@github.com:nmartynenko/play-spring-style.git

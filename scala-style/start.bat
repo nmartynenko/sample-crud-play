@@ -1,1 +1,0 @@
-cmd /c sbt play "run 8080"
