@@ -72,9 +72,9 @@ If this license doesn't suit you mail me at n.martynenko (at) aimprosoft.com.
 
 ### Download ###
 
-* <a href="https://github.com/nmartynenko/sample-crud-play/zipball/master">sample-crud-play.zip</a>
+* <a href="https://github.com/nmartynenko/play-scala-style/archive/master.zip">play-scala-style.zip</a>
 
-* <a href="https://github.com/nmartynenko/sample-crud-play/tarball/master">sample-crud-play.tar.gz</a>
+* <a href="https://github.com/nmartynenko/play-spring-style/archive/master.zip">play-spring-style.zip</a>
 
 ### Getting started ###
 You need to [download](#download) latest version of sources, unpack it and launch either ```start.sh``` on *nix systems or ```start.bat``` on windows platform.
